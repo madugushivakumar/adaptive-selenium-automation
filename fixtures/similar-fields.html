@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Similar Fields Practice Form</title>
+</head>
+<body>
+    <form id="complex-registration">
+        <!-- Multiple Text Fields with "Name" -->
+        <div class="row">
+            <label for="company">Company Name</label>
+            <input id="company" type="text" name="company" placeholder="Company Name" />
+        </div>
+        <div class="row">
+            <label for="middle_name">Middle Name</label>
+            <input id="middle_name" type="text" name="middle_name" placeholder="Middle Name" />
+        </div>
+        <div class="row">
+            <label for="first_name">First Name</label>
+            <input id="first_name" type="text" name="first_name" placeholder="First Name" />
+        </div>
+        <div class="row">
+            <label for="last_name">Last Name</label>
+            <input id="last_name" type="text" name="last_name" placeholder="Last Name" />
+        </div>
+
+        <!-- Multiple Radio Groups -->
+        <div class="row">
+            <label>Marital Status</label>
+            <div>
+                <label><input type="radio" name="marital" value="Single" /> Single</label>
+                <label><input type="radio" name="marital" value="Married" /> Married</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <label>Gender</label>
+            <div>
+                <label><input type="radio" name="gender" value="Male" /> Male</label>
+                <label><input type="radio" name="gender" value="Female" /> Female</label>
+                <label><input type="radio" name="gender" value="Transgender" /> Transgender</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <label>Communication Preference</label>
+            <div>
+                <label><input type="radio" name="pref" value="Email" /> Email</label>
+                <label><input type="radio" name="pref" value="SMS" /> SMS</label>
+            </div>
+        </div>
+
+        <!-- Multiple Dropdown Elements -->
+        <div class="row">
+            <label for="country_select">Country</label>
+            <select id="country_select" name="country">
+                <option value="">-- Choose Country --</option>
+                <option value="Australia">Australia</option>
+                <option value="India">India</option>
+                <option value="United States">United States</option>
+            </select>
+        </div>
+
+        <div class="row">
+            <label for="state_select">State</label>
+            <select id="state_select" name="state">
+                <option value="">-- Choose State --</option>
+                <option value="California">California</option>
+                <option value="India">India</option>
+                <option value="Texas">Texas</option>
+            </select>
+        </div>
+
+        <div class="row">
+            <label for="city_select">City</label>
+            <select id="city_select" name="city">
+                <option value="">-- Choose City --</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="New York">New York</option>
+            </select>
+        </div>
+    </form>
+</body>
+</html>
+

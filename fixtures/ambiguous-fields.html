@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ambiguous Fields Form</title>
+</head>
+<body>
+    <form id="ambiguous-form">
+        <!-- Two identical candidate fields with equal scores and no differentiating context -->
+        <div class="row">
+            <label for="first_name_1">First Name</label>
+            <input id="first_name_1" type="text" placeholder="First Name" />
+        </div>
+
+        <div class="row">
+            <label for="first_name_2">First Name</label>
+            <input id="first_name_2" type="text" placeholder="First Name" />
+        </div>
+
+        <!-- Two identical Gender radio groups -->
+        <div class="row">
+            <fieldset>
+                <legend>Gender</legend>
+                <label><input type="radio" name="g1" value="Male" /> Male</label>
+                <label><input type="radio" name="g1" value="Female" /> Female</label>
+            </fieldset>
+        </div>
+
+        <div class="row">
+            <fieldset>
+                <legend>Gender</legend>
+                <label><input type="radio" name="g2" value="Male" /> Male</label>
+                <label><input type="radio" name="g2" value="Female" /> Female</label>
+            </fieldset>
+        </div>
+
+        <!-- Two identical State selects -->
+        <div class="row">
+            <label for="s1">State</label>
+            <select id="s1">
+                <option value="India">India</option>
+            </select>
+        </div>
+
+        <div class="row">
+            <label for="s2">State</label>
+            <select id="s2">
+                <option value="India">India</option>
+            </select>
+        </div>
+    </form>
+</body>
+</html>
+

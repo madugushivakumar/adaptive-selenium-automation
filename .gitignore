@@ -1,0 +1,23 @@
+## Visual Studio / .NET
+[Bb]in/
+[Oo]bj/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Test Results and Artifacts (except templates)
+TestResults/
+*.trx
+
+## Local .NET SDK install
+.dotnet/
+dotnet-install.ps1
+target_page.html
+
+## OS generated
+Thumbs.db
+Desktop.ini
+.DS_Store
+

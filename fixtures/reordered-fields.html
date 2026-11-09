@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reordered Fields Practice Form</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .form-row { margin-bottom: 15px; }
+        .label { display: block; font-weight: bold; margin-bottom: 5px; }
+        .input-box { width: 300px; padding: 8px; }
+    </style>
+</head>
+<body>
+    <h2>Reordered Practice Form</h2>
+    <form id="reordered-form">
+        <!-- 1. State is placed FIRST -->
+        <div class="form-row">
+            <label for="fld_state" class="label">State</label>
+            <select id="fld_state" name="selected_state" class="input-box">
+                <option value="">-- Choose Option --</option>
+                <option value="Australia">Australia</option>
+                <option value="Canada">Canada</option>
+                <option value="Germany">Germany</option>
+                <option value="India">India</option>
+                <option value="United States">United States</option>
+            </select>
+        </div>
+
+        <!-- 2. Gender is placed SECOND -->
+        <div class="form-row">
+            <span class="label">Gender</span>
+            <div id="gender-options">
+                <label><input type="radio" name="opt_gender" value="Female" /> Female</label>
+                <label><input type="radio" name="opt_gender" value="Male" /> Male</label>
+                <label><input type="radio" name="opt_gender" value="Transgender" /> Transgender</label>
+            </div>
+        </div>
+
+        <!-- 3. Last Name is placed THIRD -->
+        <div class="form-row">
+            <label for="fld_last_name" class="label">Last Name</label>
+            <input id="fld_last_name" type="text" name="family_name" class="input-box" placeholder="Your surname" />
+        </div>
+
+        <!-- 4. First Name is placed FOURTH (Last) -->
+        <div class="form-row">
+            <label for="fld_first_name" class="label">First Name</label>
+            <input id="fld_first_name" type="text" name="given_name" class="input-box" placeholder="Enter first name" />
+        </div>
+
+        <button type="button">Save</button>
+    </form>
+</body>
+</html>
+

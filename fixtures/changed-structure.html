@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Changed Structure Practice Form</title>
+</head>
+<body>
+    <div class="custom-card">
+        <section class="section-container">
+            <article class="data-block">
+                <!-- Wrapping label with no 'for' attribute and deeply nested input -->
+                <div class="deep-row">
+                    <div class="inner-cell">
+                        <label>
+                            <span>First Name</span>
+                            <div class="input-nesting-level-1">
+                                <div class="input-nesting-level-2">
+                                    <input type="text" placeholder="First Name" />
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Fieldset with legend for Gender -->
+                <div class="deep-row">
+                    <fieldset class="custom-fieldset">
+                        <legend>Select Gender</legend>
+                        <div class="options-flex">
+                            <label><input type="radio" value="Male" /> Male</label>
+                            <label><input type="radio" value="Female" /> Female</label>
+                            <label><input type="radio" value="Transgender" /> Transgender</label>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <!-- Dropdown with adjacent heading and aria-label -->
+                <div class="deep-row">
+                    <div class="label-heading">State/Province</div>
+                    <div class="select-enclosure">
+                        <select aria-label="State">
+                            <option>-- Select --</option>
+                            <option value="India">India</option>
+                            <option value="Canada">Canada</option>
+                            <option value="United Kingdom">United Kingdom</option>
+                        </select>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </div>
+</body>
+</html>
+

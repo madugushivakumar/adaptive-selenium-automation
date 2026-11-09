@@ -1,0 +1,48 @@
+{
+  "testSuite": "Adaptive Form Automation",
+  "targetUrl": "https://app.cloudqa.io/home/AutomationPracticeForm",
+  "generatedAt": "2026-11-09T16:17:50.7572448Z",
+  "totalTests": 3,
+  "passedTests": 3,
+  "failedTests": 0,
+  "ambiguousTests": 0,
+  "totalDurationSeconds": 5.7566578,
+  "results": [
+    {
+      "testName": "Test_FirstName",
+      "field": "First Name",
+      "status": "Passed",
+      "confidence": 100,
+      "matchingStrategy": "Associated Label / Semantic Heuristic",
+      "expectedValue": "Shiva",
+      "actualValue": "Shiva",
+      "durationSeconds": 2.41,
+      "errorMessage": null,
+      "screenshotPath": null
+    },
+    {
+      "testName": "Test_Gender",
+      "field": "Gender",
+      "status": "Passed",
+      "confidence": 100,
+      "matchingStrategy": "Logical Grouping / Proximity Analysis",
+      "expectedValue": "Male",
+      "actualValue": "Male",
+      "durationSeconds": 0.74,
+      "errorMessage": null,
+      "screenshotPath": null
+    },
+    {
+      "testName": "Test_State",
+      "field": "State",
+      "status": "Passed",
+      "confidence": 100,
+      "matchingStrategy": "Select Semantic Discovery / Option Matching",
+      "expectedValue": "India",
+      "actualValue": "India",
+      "durationSeconds": 2.61,
+      "errorMessage": null,
+      "screenshotPath": null
+    }
+  ]
+}
