@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Label Variations Form - Variation 3</title>
+</head>
+<body>
+    <h2>Form Variation 3: Enter First Name, Select Gender, Select State</h2>
+    <form id="form-variation-3">
+        <div class="row">
+            <label for="fld_enter_fn">Enter First Name</label>
+            <input id="fld_enter_fn" type="text" name="entry_fname" placeholder="Enter First Name" />
+        </div>
+        <div class="row">
+            <fieldset>
+                <legend>Select Gender</legend>
+                <label><input type="radio" name="grp_gender_entry" value="Male" /> Male</label>
+                <label><input type="radio" name="grp_gender_entry" value="Female" /> Female</label>
+            </fieldset>
+        </div>
+        <div class="row">
+            <label for="fld_select_state">Select State</label>
+            <select id="fld_select_state" name="sel_target_state">
+                <option value="">-- Choose --</option>
+                <option value="India">India</option>
+                <option value="Ontario">Ontario</option>
+            </select>
+        </div>
+    </form>
+</body>
+</html>
+

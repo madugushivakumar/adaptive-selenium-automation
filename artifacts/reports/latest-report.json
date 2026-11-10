@@ -1,12 +1,12 @@
 {
   "testSuite": "Adaptive Form Automation",
-  "targetUrl": "https://app.cloudqa.io/home/AutomationPracticeForm",
-  "generatedAt": "2026-11-09T16:17:50.7572448Z",
+  "targetUrl": "file:///C:/Users/Madugu%20Shiva%20Kumar/OneDrive/%E5%9B%BE%E7%89%87/Desktop/adaptive-selenium-automation/fixtures/label-variations.html",
+  "generatedAt": "2026-11-10T05:47:55.1557826Z",
   "totalTests": 3,
   "passedTests": 3,
   "failedTests": 0,
   "ambiguousTests": 0,
-  "totalDurationSeconds": 5.7566578,
+  "totalDurationSeconds": 1.0899387,
   "results": [
     {
       "testName": "Test_FirstName",
@@ -16,7 +16,7 @@
       "matchingStrategy": "Associated Label / Semantic Heuristic",
       "expectedValue": "Shiva",
       "actualValue": "Shiva",
-      "durationSeconds": 2.41,
+      "durationSeconds": 0.42,
       "errorMessage": null,
       "screenshotPath": null
     },
@@ -24,11 +24,11 @@
       "testName": "Test_Gender",
       "field": "Gender",
       "status": "Passed",
-      "confidence": 100,
+      "confidence": 91,
       "matchingStrategy": "Logical Grouping / Proximity Analysis",
       "expectedValue": "Male",
       "actualValue": "Male",
-      "durationSeconds": 0.74,
+      "durationSeconds": 0.34,
       "errorMessage": null,
       "screenshotPath": null
     },
@@ -36,11 +36,11 @@
       "testName": "Test_State",
       "field": "State",
       "status": "Passed",
-      "confidence": 100,
+      "confidence": 94,
       "matchingStrategy": "Select Semantic Discovery / Option Matching",
       "expectedValue": "India",
       "actualValue": "India",
-      "durationSeconds": 2.61,
+      "durationSeconds": 0.33,
       "errorMessage": null,
       "screenshotPath": null
     }

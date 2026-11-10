@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Similar Fields Expanded Form</title>
+</head>
+<body>
+    <h1>Complex Multi-Entity Enterprise Portal</h1>
+    <form id="enterprise-form" class="layout-grid-v3">
+        <!-- 1. Subscription Preference Radio Group (Unrelated) -->
+        <div class="card-section-84">
+            <span class="sec-title">Subscription Preference</span>
+            <div class="opts">
+                <label><input type="radio" name="pref_cadence" value="Daily" /> Daily Digest</label>
+                <label><input type="radio" name="pref_cadence" value="Weekly" /> Weekly Summary</label>
+                <label><input type="radio" name="pref_cadence" value="Monthly" /> Monthly Newsletter</label>
+            </div>
+        </div>
+
+        <!-- 2. Middle Name Text Input -->
+        <div class="cell-wrap-12">
+            <label for="fld_mid_init">Middle Name</label>
+            <input id="fld_mid_init" type="text" name="txt_mid_name" placeholder="Middle Name or Initial" />
+        </div>
+
+        <!-- 3. Country Dropdown -->
+        <div class="cell-wrap-13">
+            <label for="cbo_nation">Country</label>
+            <select id="cbo_nation" name="geo_nation_code">
+                <option value="">-- Choose Country --</option>
+                <option value="US">United States</option>
+                <option value="IN">India</option>
+                <option value="UK">United Kingdom</option>
+            </select>
+        </div>
+
+        <!-- 4. Company Name Text Input -->
+        <div class="cell-wrap-14">
+            <label for="fld_org_legal">Company Name</label>
+            <input id="fld_org_legal" type="text" name="corp_legal_name" placeholder="Registered Company Name" />
+        </div>
+
+        <!-- 5. TARGET FIELD: Gender Radio Group -->
+        <div class="card-section-85">
+            <fieldset class="grp-enclosure">
+                <legend class="grp-legend">Gender</legend>
+                <div class="radio-bar">
+                    <label><input type="radio" name="ident_gender_opt" value="Male" /> Male</label>
+                    <label><input type="radio" name="ident_gender_opt" value="Female" /> Female</label>
+                    <label><input type="radio" name="ident_gender_opt" value="Transgender" /> Transgender</label>
+                </div>
+            </fieldset>
+        </div>
+
+        <!-- 6. Last Name Text Input -->
+        <div class="cell-wrap-15">
+            <label for="fld_sur_name">Last Name</label>
+            <input id="fld_sur_name" type="text" name="family_surname" placeholder="Last Name / Surname" />
+        </div>
+
+        <!-- 7. City Dropdown -->
+        <div class="cell-wrap-16">
+            <label for="cbo_metro_city">City</label>
+            <select id="cbo_metro_city" name="city_selection">
+                <option value="">-- Choose City --</option>
+                <option value="HYD">Hyderabad</option>
+                <option value="BLR">Bangalore</option>
+                <option value="SFO">San Francisco</option>
+            </select>
+        </div>
+
+        <!-- 8. TARGET FIELD: First Name Text Input -->
+        <div class="cell-wrap-17">
+            <label for="fld_target_fname">First Name</label>
+            <input id="fld_target_fname" type="text" name="given_first_name" placeholder="First Name" />
+        </div>
+
+        <!-- 9. Department Dropdown -->
+        <div class="cell-wrap-18">
+            <label for="cbo_dept_unit">Department</label>
+            <select id="cbo_dept_unit" name="business_dept">
+                <option value="">-- Choose Dept --</option>
+                <option value="QA">Quality Assurance</option>
+                <option value="ENG">Software Engineering</option>
+                <option value="OPS">Operations</option>
+            </select>
+        </div>
+
+        <!-- 10. Employment Status Radio Group (Unrelated) -->
+        <div class="card-section-86">
+            <span class="sec-title">Employment Status</span>
+            <div class="opts">
+                <label><input type="radio" name="work_status" value="FullTime" /> Full-time</label>
+                <label><input type="radio" name="work_status" value="PartTime" /> Part-time</label>
+                <label><input type="radio" name="work_status" value="Contractor" /> Contractor</label>
+            </div>
+        </div>
+
+        <!-- 11. TARGET FIELD: State Dropdown -->
+        <div class="cell-wrap-19">
+            <label for="cbo_target_state">State</label>
+            <select id="cbo_target_state" name="state_province_code">
+                <option value="">-- Choose State --</option>
+                <option value="Telangana">Telangana</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="California">California</option>
+                <option value="India">India</option>
+            </select>
+        </div>
+
+        <!-- 12. Email & Phone Inputs -->
+        <div class="cell-wrap-20">
+            <label for="fld_user_email">Email</label>
+            <input id="fld_user_email" type="email" name="contact_email" placeholder="name@company.com" />
+        </div>
+        <div class="cell-wrap-21">
+            <label for="fld_user_phone">Phone</label>
+            <input id="fld_user_phone" type="tel" name="contact_phone" placeholder="+1-555-0199" />
+        </div>
+    </form>
+</body>
+</html>
+

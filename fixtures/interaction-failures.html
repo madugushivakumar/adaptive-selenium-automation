@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interaction Failures Test Form</title>
+</head>
+<body>
+    <h2>Form A: Disabled First Name</h2>
+    <form id="form-disabled-fn">
+        <div class="row">
+            <label for="disabled_fname">First Name</label>
+            <input id="disabled_fname" type="text" name="fname" placeholder="First Name" disabled />
+        </div>
+    </form>
+
+    <h2>Form B: Hidden First Name</h2>
+    <form id="form-hidden-fn">
+        <div class="row">
+            <label for="hidden_fname">First Name</label>
+            <input id="hidden_fname" type="text" name="fname" placeholder="First Name" style="display: none;" />
+        </div>
+    </form>
+
+    <h2>Form C: Disabled Gender Option</h2>
+    <form id="form-disabled-gender-opt">
+        <fieldset>
+            <legend>Gender</legend>
+            <label><input type="radio" name="gender_test" value="Male" /> Male</label>
+            <label><input type="radio" name="gender_test" value="Female" disabled /> Female</label>
+        </fieldset>
+    </form>
+
+    <h2>Form D: Missing State Option</h2>
+    <form id="form-missing-state-opt">
+        <div class="row">
+            <label for="fld_limited_state">State</label>
+            <select id="fld_limited_state" name="state">
+                <option value="">-- Choose State --</option>
+                <option value="California">California</option>
+                <option value="Texas">Texas</option>
+                <option value="Florida">Florida</option>
+            </select>
+        </div>
+    </form>
+</body>
+</html>
+

@@ -33,43 +33,45 @@ public class ElementScorer
             totalScore -= _weights.ContradictoryPenalty;
         }
 
-        // 2. Direct Associated Label Match
+        // 2. Direct Label Match (Associated Label or Enclosing Label, deduplicated)
+        double directLabelScore = 0.0;
         if (!string.IsNullOrWhiteSpace(candidate.AssociatedLabelText))
         {
             double matchRatio = SemanticMatcher.MatchSynonyms(candidate.AssociatedLabelText, field.Synonyms);
             if (matchRatio > 0)
             {
-                double points = matchRatio * _weights.AssociatedLabelWeight;
-                candidate.MatchEvidence["AssociatedLabelMatch"] = points;
-                totalScore += points;
+                directLabelScore = matchRatio * _weights.AssociatedLabelWeight;
+                candidate.MatchEvidence["AssociatedLabelMatch"] = directLabelScore;
 
-                if (matchRatio >= 0.9)
+                if (matchRatio >= 0.8 && !candidate.MatchEvidence.ContainsKey("ContainerRelevance"))
                 {
-                    candidate.MatchEvidence["ContainerRelevance"] = _weights.ContainerRelevanceWeight;
-                    totalScore += _weights.ContainerRelevanceWeight;
+                    double containerPoints = matchRatio * _weights.ContainerRelevanceWeight;
+                    candidate.MatchEvidence["ContainerRelevance"] = containerPoints;
+                    totalScore += containerPoints;
                 }
             }
         }
 
-        // 3. Enclosing Label Match
         if (!string.IsNullOrWhiteSpace(candidate.EnclosingLabelText))
         {
             double matchRatio = SemanticMatcher.MatchSynonyms(candidate.EnclosingLabelText, field.Synonyms);
             if (matchRatio > 0)
             {
-                double points = matchRatio * _weights.AssociatedLabelWeight;
-                candidate.MatchEvidence["EnclosingLabelMatch"] = points;
-                totalScore += points;
+                double enclosingScore = matchRatio * _weights.AssociatedLabelWeight;
+                candidate.MatchEvidence["EnclosingLabelMatch"] = enclosingScore;
+                directLabelScore = Math.Max(directLabelScore, enclosingScore);
 
-                if (matchRatio >= 0.9 && !candidate.MatchEvidence.ContainsKey("ContainerRelevance"))
+                if (matchRatio >= 0.8 && !candidate.MatchEvidence.ContainsKey("ContainerRelevance"))
                 {
-                    candidate.MatchEvidence["ContainerRelevance"] = _weights.ContainerRelevanceWeight;
-                    totalScore += _weights.ContainerRelevanceWeight;
+                    double containerPoints = matchRatio * _weights.ContainerRelevanceWeight;
+                    candidate.MatchEvidence["ContainerRelevance"] = containerPoints;
+                    totalScore += containerPoints;
                 }
             }
         }
+        totalScore += directLabelScore;
 
-        // 4. Accessible Name / ARIA Match
+        // 3. Accessible Name / ARIA Match
         string ariaSignal = !string.IsNullOrWhiteSpace(candidate.AriaLabel)
             ? candidate.AriaLabel
             : candidate.AriaLabelledByText;
@@ -83,15 +85,16 @@ public class ElementScorer
                 candidate.MatchEvidence["AccessibleNameMatch"] = points;
                 totalScore += points;
 
-                if (matchRatio >= 0.9 && !candidate.MatchEvidence.ContainsKey("ContainerRelevance"))
+                if (matchRatio >= 0.8 && !candidate.MatchEvidence.ContainsKey("ContainerRelevance"))
                 {
-                    candidate.MatchEvidence["ContainerRelevance"] = _weights.ContainerRelevanceWeight;
-                    totalScore += _weights.ContainerRelevanceWeight;
+                    double containerPoints = matchRatio * _weights.ContainerRelevanceWeight;
+                    candidate.MatchEvidence["ContainerRelevance"] = containerPoints;
+                    totalScore += containerPoints;
                 }
             }
         }
 
-        // 5. Contextual Proximity Text Match
+        // 4. Contextual Proximity Text & Container Relevance Match
         if (!string.IsNullOrWhiteSpace(candidate.NearbyContextText))
         {
             double matchRatio = SemanticMatcher.MatchSynonyms(candidate.NearbyContextText, field.Synonyms);
@@ -100,10 +103,17 @@ public class ElementScorer
                 double points = matchRatio * _weights.ContextualTextWeight;
                 candidate.MatchEvidence["ContextualTextMatch"] = points;
                 totalScore += points;
+
+                if (matchRatio >= 0.8 && !candidate.MatchEvidence.ContainsKey("ContainerRelevance"))
+                {
+                    double containerPoints = matchRatio * _weights.ContainerRelevanceWeight;
+                    candidate.MatchEvidence["ContainerRelevance"] = containerPoints;
+                    totalScore += containerPoints;
+                }
             }
         }
 
-        // 6. Placeholder Match
+        // 5. Placeholder Match
         if (!string.IsNullOrWhiteSpace(candidate.Placeholder))
         {
             double matchRatio = SemanticMatcher.MatchSynonyms(candidate.Placeholder, field.Synonyms);
@@ -115,7 +125,7 @@ public class ElementScorer
             }
         }
 
-        // 7. Name or ID attribute semantic fallback
+        // 6. Name or ID attribute semantic fallback
         string attrSignal = $"{candidate.Name} {candidate.Id}".Trim();
         if (!string.IsNullOrWhiteSpace(attrSignal))
         {
@@ -128,7 +138,7 @@ public class ElementScorer
             }
         }
 
-        // 8. Technical Type Match
+        // 7. Technical Type Match
         bool typeMatches = field.FieldType switch
         {
             FieldType.TextInput => candidate.TagName.Equals("input", StringComparison.OrdinalIgnoreCase) &&

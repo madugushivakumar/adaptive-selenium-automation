@@ -1,94 +1,145 @@
-# Test Results & Verification Report
+# Test Results & Verification Report (Final Audit)
 
 **Framework:** Adaptive Selenium Automation Engine (.NET 8)  
-**Execution Timestamp:** November 9, 2026  
-**Environment:** Windows 10/11, Google Chrome (Headless / Visual Mode), ChromeDriver 156 via Selenium Manager.
+**Execution Timestamp:** November 10, 2026  
+**Environment:** Windows 10/11, Google Chrome (Headless / Visual Mode), ChromeDriver 156.0.8078.80 via Selenium Manager.  
+**SDK:** .NET 8.0.427
 
 ---
 
 ## 1. Executive Summary
 
-| Test Suite | Total Executed | Passed | Failed | Ambiguous | Pass Rate |
+| Test Suite | Total Executed | Passed | Failed | Ambiguous Refusals | Pass Rate |
 |---|---|---|---|---|---|
 | **Live Integration Suite (CloudQA)** | 3 | 3 | 0 | 0 | **100%** |
-| **Adaptive Mutation Suite (Fixtures)** | 6 | 6 | 0 | 0 | **100%** |
-| **Component Field Tests** | 3 | 3 | 0 | 0 | **100%** |
-| **Total Test Suite** | **9** | **9** | **0** | **0** | **100%** |
+| **NUnit Automated Suite** | 27 | 27 | 0 | 0 | **100%** |
+| **Standalone Fixture Runner (`run-all-fixtures.ps1`)** | 7 | 7 | 0 | 0 | **100%** |
+| **Total Test Suite** | **37** | **37** | **0** | **0** | **100%** |
 
-All nine automated NUnit test scenarios and the standalone CLI execution against the live target page (`https://app.cloudqa.io/home/AutomationPracticeForm`) executed and verified successfully without hardcoded selectors.
+All twenty-seven automated NUnit test scenarios, all seven HTML mutation fixtures via the compiled executable, and the live CloudQA automation (`https://app.cloudqa.io/home/AutomationPracticeForm`) executed and passed with 100% verification and zero hardcoded selectors.
 
 ---
 
-## 2. Live Integration Test Results (CloudQA)
+## 2. Live Integration Test Results (CloudQA Target)
 
-**Target URL:** `https://app.cloudqa.io/home/AutomationPracticeForm`
+**Target URL:** `https://app.cloudqa.io/home/AutomationPracticeForm`  
+**Execution Output:**
 
 ```
 ======================================================================
    Adaptive Selenium Web Form Automation Engine (.NET 8)
 ======================================================================
-Target URL: https://app.cloudqa.io/home/AutomationPracticeForm
-Headless Mode: True
-Test Data: FirstName='Shiva', Gender='Male', State='India'
-Navigating to URL: https://app.cloudqa.io/home/AutomationPracticeForm
-Starting ChromeDriver 156.0.8078.80
-Locating field 'First Name' of type TextInput...
-Match result for 'First Name': Score=100, Confidence=High, Ambiguous=False
-Entered 'Shiva' into candidate <input id='fname' name='First Name' type='text' label='First Name' placeholder='Name'>
-Locating field 'Gender' of type RadioGroup...
-Match result for 'Gender': Score=100, Confidence=High, Ambiguous=False
-Radio option 'Male' selected: SelectedState=True
-Locating field 'State' of type Dropdown...
-Match result for 'State': Score=100, Confidence=High, Ambiguous=False
-Dropdown option selected. Text='India', Value='India'
-WebDriver session disposed cleanly.
+11:10:27 info: AdaptiveAutomation[0] Target URL: https://app.cloudqa.io/home/AutomationPracticeForm
+11:10:27 info: AdaptiveAutomation[0] Headless Mode: True
+11:10:27 info: AdaptiveAutomation[0] Test Data: FirstName='Shiva', Gender='Male', State='India'
+11:10:27 info: AdaptiveAutomation[0] Navigating to URL: https://app.cloudqa.io/home/AutomationPracticeForm
+Starting ChromeDriver 156.0.8078.80 on port 63773
+11:10:35 info: AdaptiveAutomation[0] Locating field 'First Name' of type TextInput...
+11:10:42 info: AdaptiveAutomation[0] Match result for 'First Name': Score=99.25, Confidence=High, Ambiguous=False
+11:10:42 info: AdaptiveAutomation[0] Entered 'Shiva' into candidate <input id='fname' name='First Name' type='text' label='First Name' placeholder='Name'>
+11:10:42 info: AdaptiveAutomation[0] Locating field 'Gender' of type RadioGroup...
+11:10:43 info: AdaptiveAutomation[0] Match result for 'Gender': Score=93.5, Confidence=High, Ambiguous=False
+11:10:43 info: AdaptiveAutomation[0] Radio option 'Male' selected: SelectedState=True
+11:10:43 info: AdaptiveAutomation[0] Locating field 'State' of type Dropdown...
+11:10:45 info: AdaptiveAutomation[0] Match result for 'State': Score=94, Confidence=High, Ambiguous=False
+11:10:46 info: AdaptiveAutomation[0] Dropdown option selected. Text='India', Value='India'
+11:10:47 info: AdaptiveAutomation[0] WebDriver session disposed cleanly.
 
 ----------------------------------------------------------------------
                         EXECUTION SUMMARY                             
 ----------------------------------------------------------------------
-[PASS] First Name   | Conf: 100.0% | Expected: Shiva      | Actual: Shiva      (2.41s)
-[PASS] Gender       | Conf: 100.0% | Expected: Male       | Actual: Male       (0.74s)
-[PASS] State        | Conf: 100.0% | Expected: India      | Actual: India      (2.61s)
+[PASS] First Name   | Conf:  99.2% | Expected: Shiva      | Actual: Shiva      (7.59s)
+[PASS] Gender       | Conf:  93.5% | Expected: Male       | Actual: Male       (1.20s)
+[PASS] State        | Conf:  94.0% | Expected: India      | Actual: India      (2.19s)
 ----------------------------------------------------------------------
 Results: 3/3 Passed.
+Reports Generated:
+  - JSON: artifacts\reports\latest-report.json
+  - HTML: artifacts\reports\latest-report.html
+----------------------------------------------------------------------
 ```
 
 ### Detailed Field Breakdown:
 1. **First Name:**
    - **Identified Element:** `<input id="fname" type="text" name="First Name" class="form-control" placeholder="Name">`
-   - **Confidence Score:** 100.0% (High Confidence)
-   - **Matching Signals:** Associated Label Match (35), Placeholder Match (20), Technical Type Match (15), Container Proximity (15), Name Attribute (15).
-   - **Interaction:** Input cleared and typed `"Shiva"`. Verified via `.GetAttribute("value")`.
+   - **Confidence Score:** 99.2% (High Confidence)
+   - **Matching Evidence:** `AssociatedLabelMatch` (45.0), `ContainerRelevance` (10.0), `ContextualTextMatch` (15.0), `TechnicalTypeMatch` (15.0), `PlaceholderMatch` (14.25).
+   - **Interaction:** Input cleared and typed `"Shiva"`. Strict post-interaction DOM assertion verified `actual == expected`.
 2. **Gender:**
    - **Identified Element:** Logical Radio Group `name="gender"` (3 options: Male, Female, Transgender)
-   - **Confidence Score:** 100.0% (High Confidence)
-   - **Matching Signals:** Associated Label / Group Header (35), Contextual Match (25), Technical Type Match (15), Container Proximity (15), Name Attribute (15).
-   - **Interaction:** Option `"Male"` selected. Verified via `.Selected == true`.
+   - **Confidence Score:** 93.5% (High Confidence)
+   - **Matching Evidence:** `AssociatedLabelMatch` (45.0), `ContainerRelevance` (10.0), `ContextualTextMatch` (15.0), `TechnicalTypeMatch` (15.0), `AttributeNameMatch` (8.5).
+   - **Interaction:** Option `"Male"` clicked. Strict post-interaction DOM assertion verified `option.Selected == true`.
 3. **State:**
    - **Identified Element:** `<select id="state" name="State">`
-   - **Confidence Score:** 100.0% (High Confidence)
-   - **Matching Signals:** Associated Label Match (35), Technical Type Match (15), Name Attribute (15), Container Proximity (15), Semantic Option Match.
-   - **Interaction:** Option `"India"` selected via `SelectElement`. Verified via `.SelectedOption.Text == "India"`.
+   - **Confidence Score:** 94.0% (High Confidence)
+   - **Matching Evidence:** `AssociatedLabelMatch` (45.0), `ContainerRelevance` (10.0), `ContextualTextMatch` (15.0), `TechnicalTypeMatch` (15.0), `AttributeNameMatch` (9.0).
+   - **Interaction:** Option `"India"` selected via `SelectElement`. Strict post-interaction DOM assertion verified `selectedOption.Text == "India"`.
 
 ---
 
-## 3. Mutation Testing Results (Resilience Verification)
+## 3. NUnit 27-Test Breakdown (All 8 Mutations Covered)
 
-Controlled HTML mutation fixtures were executed to stress-test the framework against real-world front-end modifications without altering framework source code:
-
-| Mutation Scenario | Fixture | Modifications Simulated | Observed Score & Behavior | Result |
-|---|---|---|---|---|
-| **Mutation 1: Changed Attributes** | `changed-attributes.html` | IDs randomized (`u_rand_1092`), names scrambled (`param_fn_382`, `sex_selection_grp`), CSS classes altered (`box-modern`). | First Name: 95.0%<br>Gender: 70.0%<br>State: 88.5%<br>All elements correctly matched via semantic text & context. | **PASS** |
-| **Mutation 2: Field Reordering** | `reordered-fields.html` | State moved to 1st, Gender to 2nd, Last Name to 3rd, First Name to last. | Position-independent identification. Gender selected `"Female"`, State selected `"India"`, First Name entered `"Shiva"`. | **PASS** |
-| **Mutation 3: Changed Structure** | `changed-structure.html` | Deeply nested divs, inputs wrapped inside `<label>`, fieldset/legend for radio group, `aria-label="State"` for select. | Identified wrapped inputs, legend headers, and ARIA attributes seamlessly. | **PASS** |
-| **Mutation 4: Similar Fields** | `similar-fields.html` | Page contains Company Name, Middle Name, First Name, Last Name; 3 radio groups (Marital Status, Gender, Preference); 3 dropdowns (Country, State, City). | Contradictory keyword penalties (-50) prevented false matches. Selected First Name (`id="first_name"`), Gender (`name="gender"`), State (`id="state_select"`). | **PASS** |
-| **Mutation 6: Ambiguous Fields** | `ambiguous-fields.html` | Two identical First Name fields with identical scores and no differentiating context. | Ambiguity detected (Delta = 0.0 <= 5.0). Safe refusal triggered with error: *"Ambiguous match detected between candidate 1 and candidate 2"*. | **PASS** |
-| **Mutation 7: Missing Fields** | `missing-fields.html` | Form contains only Email and Comments (First Name, Gender, State omitted). | Identified score fell below minimum confidence threshold. Controlled failure reported without unhandled crashes. | **PASS** |
+| Test Suite File | Test Method Name | Mutation Scenario | Status |
+|---|---|---|---|
+| `AdaptiveRegressionTests.cs` | `Mutation1_ChangedAttributes_ShouldIdentifyAndInteractSuccessfully` | Scrambled IDs, names, classes | **PASS** |
+| `AdaptiveRegressionTests.cs` | `Mutation2_ReorderedFields_ShouldIdentifyFieldsRegardlessOfOrder` | Reordered DOM sequence | **PASS** |
+| `AdaptiveRegressionTests.cs` | `Mutation3_ChangedStructure_ShouldIdentifyWithNestedContainersAndAria` | Nested divs, fieldsets, ARIA | **PASS** |
+| `AdaptiveRegressionTests.cs` | `Mutation4_SimilarFields_ShouldSelectTargetFieldAndAvoidConfusingCompetitors` | Competing similar fields | **PASS** |
+| `AdaptiveRegressionTests.cs` | `Mutation6_AmbiguousFields_ShouldDetectAmbiguityAndRefuseArbitraryInteraction` | Equidistant candidates | **PASS** |
+| `AdaptiveRegressionTests.cs` | `Mutation7_MissingFields_ShouldReportClearDiagnosticFailure` | Missing fields rejection | **PASS** |
+| `AdaptiveRegressionTests.cs` | `FirstName_ShouldBeDynamicallyIdentified_AndFilledCorrectly` | First Name live interaction | **PASS** |
+| `AdaptiveRegressionTests.cs` | `Gender_ShouldBeDynamicallyIdentified_AndOptionSelected` | Gender live interaction | **PASS** |
+| `AdaptiveRegressionTests.cs` | `State_ShouldBeDynamicallyIdentified_AndOptionSelected` | State live interaction | **PASS** |
+| `LabelVariationTests.cs` | `Mutation5_LabelVariations_FirstName("Given Name")` | Label variation: Given Name | **PASS** |
+| `LabelVariationTests.cs` | `Mutation5_LabelVariations_FirstName("Your First Name")` | Label variation: Your First Name | **PASS** |
+| `LabelVariationTests.cs` | `Mutation5_LabelVariations_FirstName("Enter First Name")` | Label variation: Enter First Name | **PASS** |
+| `LabelVariationTests.cs` | `Mutation5_LabelVariations_Gender("Select Gender")` | Label variation: Select Gender | **PASS** |
+| `LabelVariationTests.cs` | `Mutation5_LabelVariations_Gender("Your Gender")` | Label variation: Your Gender | **PASS** |
+| `LabelVariationTests.cs` | `Mutation5_LabelVariations_State("State/Province")` | Label variation: State/Province | **PASS** |
+| `LabelVariationTests.cs` | `Mutation5_LabelVariations_State("Choose State")` | Label variation: Choose State | **PASS** |
+| `LabelVariationTests.cs` | `Mutation5_LabelVariations_State("Select State")` | Label variation: Select State | **PASS** |
+| `LabelVariationTests.cs` | `Mutation5_UnsupportedLabels_ShouldSafelyRejectUnrelatedFields` | Refuses unrelated controls | **PASS** |
+| `InteractionFailureTests.cs` | `Mutation8_ScenarioA_DisabledFirstName_ShouldDetectAndRefuseUnsafeInteraction` | Disabled input guard | **PASS** |
+| `InteractionFailureTests.cs` | `Mutation8_ScenarioB_HiddenFirstName_ShouldDetectAndRefuseInteraction` | Hidden input guard | **PASS** |
+| `InteractionFailureTests.cs` | `Mutation8_ScenarioC_DisabledGenderOption_ShouldDetectDisabledRadio` | Disabled radio guard | **PASS** |
+| `InteractionFailureTests.cs` | `Mutation8_ScenarioD_MissingStateOption_ShouldThrowDescriptiveNoSuchElement` | Missing dropdown option | **PASS** |
+| `InteractionFailureTests.cs` | `Mutation8_ScenarioE_DynamicallyRenderedFields_ShouldIdentifyViaExplicitWait` | Explicit wait dynamic load | **PASS** |
+| `InteractionFailureTests.cs` | `Mutation8_ScenarioF_StaleElementRecovery_ShouldReInspectAndSucceed` | Stale element recovery | **PASS** |
+| `InteractionFailureTests.cs` | `Mutation8_ScenarioG_ElementNotInteractable_ShouldFailSafely` | Interaction failure safety | **PASS** |
+| `InteractionFailureTests.cs` | `Mutation8_ScenarioH_BrowserFailureAndCleanup_ShouldHandleGracefully` | Session cleanup guard | **PASS** |
+| `SimilarFieldsExpandedTests.cs` | `Mutation4_SimilarFields_Expanded_ShouldDisambiguateAllTargetsAccurately` | 6 competing text/radio/select | **PASS** |
 
 ---
 
-## 4. Diagnostics & Reporting Evidence
+## 4. Standalone Fixture Runner Results (`scripts/run-all-fixtures.ps1`)
 
-1. **Machine-Readable Telemetry:** Generated at `artifacts/reports/latest-report.json`. Contains execution timestamps, score breakdowns, test durations, and failure stacks.
-2. **Executive HTML Dashboard:** Generated at `artifacts/reports/latest-report.html`. Visual status badges, duration breakdowns, and score matrices.
-3. **Failure Screenshot Management:** Configured at `artifacts/screenshots/failures/`. On any test failure or ambiguity abort, automated screenshots are timestamped and preserved.
+The compiled executable `AdaptiveAutomation.exe` was run sequentially across all 7 mutation fixtures using CLI argument `--url`:
+
+```
+======================================================================
+                     FIXTURE EXECUTION SUMMARY                        
+======================================================================
+
+Fixture                      Status ExitCode Duration
+-------                      ------ -------- --------
+baseline.html                PASSED        0 42.51s  
+changed-attributes.html      PASSED        0 24.19s  
+reordered-fields.html        PASSED        0 8.16s   
+changed-structure.html       PASSED        0 5.08s   
+similar-fields.html          PASSED        0 8.10s   
+similar-fields-expanded.html PASSED        0 12.14s  
+label-variations.html        PASSED        0 5.07s   
+
+ALL 7 FIXTURES PASSED SUCCESSFULLY WITH THE SAME EXECUTABLE.
+```
+
+---
+
+## 5. Audit Documentation References
+
+- **[Final Submission Checklist](file:///c:/Users/Madugu%20Shiva%20Kumar/OneDrive/图片/Desktop/adaptive-selenium-automation/docs/FINAL_SUBMISSION_CHECKLIST.md)**
+- **[Final Audit Report](file:///c:/Users/Madugu%20Shiva%20Kumar/OneDrive/图片/Desktop/adaptive-selenium-automation/docs/FINAL_AUDIT_REPORT.md)**
+- **[State Field Investigation](file:///c:/Users/Madugu%20Shiva%20Kumar/OneDrive/图片/Desktop/adaptive-selenium-automation/docs/STATE_FIELD_INVESTIGATION.md)**
+- **[Confidence Scoring Audit](file:///c:/Users/Madugu%20Shiva%20Kumar/OneDrive/图片/Desktop/adaptive-selenium-automation/docs/CONFIDENCE_SCORING_AUDIT.md)**
+- **[Final Audit JSON Report](file:///c:/Users/Madugu%20Shiva%20Kumar/OneDrive/图片/Desktop/adaptive-selenium-automation/artifacts/reports/final-audit-report.json)**

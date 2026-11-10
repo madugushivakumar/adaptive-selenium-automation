@@ -8,6 +8,7 @@ using AdaptiveAutomation.Configuration;
 using AdaptiveAutomation.Discovery;
 using AdaptiveAutomation.Models;
 using AdaptiveAutomation.Reporting;
+using AdaptiveAutomation.Utilities;
 using Microsoft.Extensions.Logging;
 
 namespace AdaptiveAutomation;
@@ -156,6 +157,14 @@ public class Program
         {
             var (confidence, strategy, expected, actual) = testAction();
             sw.Stop();
+
+            // Strict value assertion
+            bool valueMatched = TextNormalizer.ExactMatch(actual, expected) || TextNormalizer.ContainsNormalized(actual, expected);
+            if (!valueMatched)
+            {
+                throw new InvalidOperationException($"Value verification failed for '{fieldName}'. Expected: '{expected}', Actual: '{actual}'.");
+            }
+
             return new TestResult
             {
                 TestName = testName,

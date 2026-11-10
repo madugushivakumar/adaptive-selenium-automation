@@ -21,13 +21,19 @@ public class TextFieldActions
     {
         var input = candidate.Element;
 
+        // 1. Eligibility validation
+        if (!candidate.IsEnabled || !input.Enabled)
+        {
+            throw new InvalidElementStateException($"Input candidate '{candidate}' is disabled and cannot be modified.");
+        }
+
+        if (!candidate.IsVisible || !input.Displayed)
+        {
+            throw new ElementNotInteractableException($"Input candidate '{candidate}' is hidden and cannot be interacted with.");
+        }
+
         WaitHelper.Retry(() =>
         {
-            if (!input.Displayed || !input.Enabled)
-            {
-                throw new ElementNotInteractableException($"Text input {candidate} is not interactable.");
-            }
-
             // Scroll into view if needed
             ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].scrollIntoView({block: 'center'});", input);
 
@@ -50,7 +56,8 @@ public class TextFieldActions
         string actualValue = input.GetAttribute("value") ?? string.Empty;
         if (!string.Equals(actualValue, textToEnter, StringComparison.Ordinal))
         {
-            _logger?.LogWarning("Value mismatch after SetText. Expected: '{Expected}', Actual: '{Actual}'", textToEnter, actualValue);
+            _logger?.LogError("Value mismatch after SetText. Expected: '{Expected}', Actual: '{Actual}'", textToEnter, actualValue);
+            throw new InvalidOperationException($"Value verification failed for input '{candidate}'. Expected: '{textToEnter}', Actual: '{actualValue}'.");
         }
 
         return actualValue;

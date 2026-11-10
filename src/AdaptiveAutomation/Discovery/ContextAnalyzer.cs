@@ -124,7 +124,18 @@ public static class ContextAnalyzer
             // 2. Look for container-level headings, legends, or enclosing label text
             try
             {
-                var container = element.FindElement(By.XPath("./ancestor::*[contains(@class, 'form-group') or contains(@class, 'form-row') or contains(@class, 'row') or contains(@class, 'field') or contains(@class, 'wrapper') or contains(@class, 'cell') or self::fieldset or self::label or self::div][1]"));
+                IWebElement? container = null;
+                var semanticContainers = element.FindElements(By.XPath("./ancestor::*[contains(@class, 'form-group') or contains(@class, 'form-row') or contains(@class, 'row') or contains(@class, 'field') or contains(@class, 'card') or contains(@class, 'section') or self::fieldset or self::form][1]"));
+                if (semanticContainers.Count > 0)
+                {
+                    container = semanticContainers[0];
+                }
+                else
+                {
+                    var divContainers = element.FindElements(By.XPath("./ancestor::div[1]"));
+                    if (divContainers.Count > 0) container = divContainers[0];
+                }
+
                 if (container != null)
                 {
                     // Find legends, labels, or heading elements inside container

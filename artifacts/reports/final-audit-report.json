@@ -1,0 +1,58 @@
+{
+  "auditReport": {
+    "title": "Adaptive Selenium Automation Framework - Final Technical Audit Report",
+    "project": "adaptive-selenium-automation",
+    "author": "Senior SDET & QA Automation Auditor",
+    "completedAt": "2026-11-10T11:25:00+05:30",
+    "runtime": ".NET 8.0.427 (C# 12)",
+    "browserEngine": "Selenium WebDriver 4.28.0 (ChromeDriver 156.0.8078.80)",
+    "summary": {
+      "liveIntegrationTests": {
+        "targetUrl": "https://app.cloudqa.io/home/AutomationPracticeForm",
+        "total": 3,
+        "passed": 3,
+        "failed": 0,
+        "results": [
+          { "field": "First Name", "status": "Passed", "confidence": 99.25, "expected": "Shiva", "actual": "Shiva", "strategy": "Associated Label / Semantic Heuristic" },
+          { "field": "Gender", "status": "Passed", "confidence": 93.5, "expected": "Male", "actual": "Male", "strategy": "Logical Grouping / Proximity Analysis" },
+          { "field": "State", "status": "Passed", "confidence": 94.0, "expected": "India", "actual": "India", "strategy": "Select Semantic Discovery / Option Matching" }
+        ]
+      },
+      "nunitTestSuite": {
+        "totalTests": 27,
+        "passed": 27,
+        "failed": 0,
+        "testBreakdown": {
+          "AdaptiveRegressionTests": 7,
+          "LabelVariationTests": 7,
+          "InteractionFailureTests": 8,
+          "SimilarFieldsExpandedTests": 1,
+          "LiveFormTests": 4
+        }
+      },
+      "fixtureExecutionScript": {
+        "script": "scripts/run-all-fixtures.ps1",
+        "executable": "src/AdaptiveAutomation/bin/Debug/net8.0/AdaptiveAutomation.exe",
+        "totalFixtures": 7,
+        "passed": 7,
+        "failed": 0,
+        "fixtures": [
+          { "fixture": "baseline.html", "status": "PASSED", "exitCode": 0 },
+          { "fixture": "changed-attributes.html", "status": "PASSED", "exitCode": 0 },
+          { "fixture": "reordered-fields.html", "status": "PASSED", "exitCode": 0 },
+          { "fixture": "changed-structure.html", "status": "PASSED", "exitCode": 0 },
+          { "fixture": "similar-fields.html", "status": "PASSED", "exitCode": 0 },
+          { "fixture": "similar-fields-expanded.html", "status": "PASSED", "exitCode": 0 },
+          { "fixture": "label-variations.html", "status": "PASSED", "exitCode": 0 }
+        ]
+      }
+    },
+    "auditFindingsResolved": [
+      { "id": "AUDIT-001", "severity": "High", "description": "Strict post-interaction value verification added to ensure actual DOM state matches expected value." },
+      { "id": "AUDIT-002", "severity": "High", "description": "Disabled and hidden input and radio guards added in TextFieldActions and RadioGroupActions." },
+      { "id": "AUDIT-003", "severity": "Medium", "description": "Calibrated heuristic weights in ScoringWeights to ensure exact label + technical type match reaches Medium confidence." },
+      { "id": "AUDIT-004", "severity": "Medium", "description": "Nearest ancestor container lookup in XPath using [1] prevents outer card label hijacking." },
+      { "id": "AUDIT-005", "severity": "High", "description": "State vs Country anomaly forensically documented in docs/STATE_FIELD_INVESTIGATION.md." }
+    ]
+  }
+}

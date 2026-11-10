@@ -41,16 +41,20 @@ public class DomInspector
         {
             try
             {
-                if (!input.Displayed || !input.Enabled)
-                {
-                    continue;
-                }
-
                 string type = input.GetAttribute("type") ?? "text";
                 if (excludedTypes.Contains(type))
                 {
                     continue;
                 }
+
+                bool isVisible = false;
+                bool isEnabled = false;
+                try
+                {
+                    isVisible = input.Displayed;
+                    isEnabled = input.Enabled;
+                }
+                catch { }
 
                 string id = input.GetAttribute("id") ?? string.Empty;
                 string name = input.GetAttribute("name") ?? string.Empty;
@@ -79,8 +83,8 @@ public class DomInspector
                     AssociatedLabelText = associatedLabel,
                     EnclosingLabelText = enclosingLabel,
                     NearbyContextText = nearbyContext,
-                    IsVisible = true,
-                    IsEnabled = true
+                    IsVisible = isVisible,
+                    IsEnabled = isEnabled
                 };
 
                 candidates.Add(candidate);
@@ -205,30 +209,34 @@ public class DomInspector
             {
                 associatedLabel = string.Empty;
 
-                // 1. Check immediately preceding label, legend, or heading
+                // 1. Check closest fieldset legend first
                 try
                 {
-                    var preceding = firstRadio.FindElements(By.XPath("./preceding::*[self::label or self::legend or contains(@class, 'label') or contains(@class, 'caption') or contains(@class, 'heading') or contains(@class, 'title')][1]"));
-                    if (preceding.Count > 0)
+                    var fieldsets = firstRadio.FindElements(By.XPath("./ancestor::fieldset[1]"));
+                    if (fieldsets.Count > 0)
                     {
-                        string pText = preceding[0].Text.Trim();
-                        if (!string.IsNullOrWhiteSpace(pText) && !options.Contains(pText, StringComparer.OrdinalIgnoreCase))
+                        var legends = fieldsets[0].FindElements(By.XPath(".//legend"));
+                        if (legends.Count > 0)
                         {
-                            associatedLabel = pText;
+                            string legText = legends[0].Text.Trim();
+                            if (!string.IsNullOrWhiteSpace(legText) && !options.Contains(legText, StringComparer.OrdinalIgnoreCase))
+                            {
+                                associatedLabel = legText;
+                            }
                         }
                     }
                 }
                 catch { }
 
-                // 2. If still empty, check ancestor containers
+                // 2. Check nearest ancestor container headings (closest row/group/field/radiogroup)
                 if (string.IsNullOrWhiteSpace(associatedLabel))
                 {
                     try
                     {
-                        var containers = firstRadio.FindElements(By.XPath("./ancestor::*[self::fieldset or contains(@class, 'group') or contains(@class, 'row') or contains(@class, 'flex') or contains(@class, 'wrapper') or contains(@class, 'field') or contains(@class, 'card')]"));
-                        foreach (var container in containers)
+                        var nearestContainers = firstRadio.FindElements(By.XPath("./ancestor::*[contains(@class, 'group') or contains(@class, 'row') or contains(@class, 'field') or @role='radiogroup'][1]"));
+                        if (nearestContainers.Count > 0)
                         {
-                            var headings = container.FindElements(By.XPath(".//legend | .//label[not(ancestor::label)] | .//span[contains(@class, 'label') or contains(@class, 'title') or contains(@class, 'heading') or contains(@class, 'caption') or contains(@class, 'text')]"));
+                            var headings = nearestContainers[0].FindElements(By.XPath(".//legend | .//label[not(ancestor::label)] | .//*[contains(@class, 'label') or contains(@class, 'caption') or contains(@class, 'heading') or contains(@class, 'header') or contains(@class, 'title') or contains(@class, 'sec-title')]"));
                             foreach (var h in headings)
                             {
                                 string hText = h.Text.Trim();
@@ -238,7 +246,24 @@ public class DomInspector
                                     break;
                                 }
                             }
-                            if (!string.IsNullOrWhiteSpace(associatedLabel)) break;
+                        }
+                    }
+                    catch { }
+                }
+
+                // 3. Fallback to immediately preceding label, legend, or heading
+                if (string.IsNullOrWhiteSpace(associatedLabel))
+                {
+                    try
+                    {
+                        var preceding = firstRadio.FindElements(By.XPath("./preceding::*[self::label or self::legend or contains(@class, 'label') or contains(@class, 'caption') or contains(@class, 'heading') or contains(@class, 'header') or contains(@class, 'title')][1]"));
+                        if (preceding.Count > 0)
+                        {
+                            string pText = preceding[0].Text.Trim();
+                            if (!string.IsNullOrWhiteSpace(pText) && !options.Contains(pText, StringComparer.OrdinalIgnoreCase))
+                            {
+                                associatedLabel = pText;
+                            }
                         }
                     }
                     catch { }
@@ -275,10 +300,14 @@ public class DomInspector
         {
             try
             {
-                if (!select.Displayed || !select.Enabled)
+                bool isVisible = false;
+                bool isEnabled = false;
+                try
                 {
-                    continue;
+                    isVisible = select.Displayed;
+                    isEnabled = select.Enabled;
                 }
+                catch { }
 
                 string id = select.GetAttribute("id") ?? string.Empty;
                 string name = select.GetAttribute("name") ?? string.Empty;
@@ -319,8 +348,8 @@ public class DomInspector
                     EnclosingLabelText = enclosingLabel,
                     NearbyContextText = nearbyContext,
                     AvailableOptions = options,
-                    IsVisible = true,
-                    IsEnabled = true
+                    IsVisible = isVisible,
+                    IsEnabled = isEnabled
                 };
 
                 candidates.Add(candidate);

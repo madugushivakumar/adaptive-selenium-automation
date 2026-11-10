@@ -26,26 +26,42 @@ public class ElementFinder
         _logger = logger;
     }
 
-    public ElementMatchResult FindField(FieldDefinition field)
+    public ElementMatchResult FindField(FieldDefinition field, int timeoutSeconds = 3)
     {
         _logger?.LogInformation("Locating field '{FieldName}' of type {FieldType}...", field.FieldName, field.FieldType);
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        ElementMatchResult lastResult = null!;
 
-        var candidates = _inspector.InspectCandidates(field.FieldType);
-        _logger?.LogDebug("Inspected {Count} candidates for field '{FieldName}'.", candidates.Count, field.FieldName);
-
-        var scored = new List<(ElementCandidate Candidate, double Score)>();
-        foreach (var candidate in candidates)
+        do
         {
-            double score = _scorer.Score(field, candidate);
-            scored.Add((candidate, score));
-            _logger?.LogDebug("Candidate {Candidate} scored: {Score}", candidate, score);
-        }
+            var candidates = _inspector.InspectCandidates(field.FieldType);
+            _logger?.LogDebug("Inspected {Count} candidates for field '{FieldName}'.", candidates.Count, field.FieldName);
 
-        var result = _evaluator.Evaluate(field, scored);
+            var scored = new List<(ElementCandidate Candidate, double Score)>();
+            foreach (var candidate in candidates)
+            {
+                double score = _scorer.Score(field, candidate);
+                scored.Add((candidate, score));
+                _logger?.LogDebug("Candidate {Candidate} scored: {Score}", candidate, score);
+            }
+
+            lastResult = _evaluator.Evaluate(field, scored);
+
+            if (lastResult.IsSuccessfulMatch || lastResult.IsAmbiguous)
+            {
+                break;
+            }
+
+            if (timeoutSeconds > 0 && sw.Elapsed.TotalSeconds < timeoutSeconds)
+            {
+                System.Threading.Thread.Sleep(200);
+            }
+        } while (sw.Elapsed.TotalSeconds < timeoutSeconds);
+
         _logger?.LogInformation("Match result for '{FieldName}': Score={Score}, Confidence={Confidence}, Ambiguous={IsAmbiguous}",
-            field.FieldName, result.Score, result.Confidence, result.IsAmbiguous);
+            field.FieldName, lastResult.Score, lastResult.Confidence, lastResult.IsAmbiguous);
 
-        return result;
+        return lastResult;
     }
 }
 

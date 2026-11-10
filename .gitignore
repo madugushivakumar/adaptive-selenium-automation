@@ -10,6 +10,7 @@
 ## Test Results and Artifacts (except templates)
 TestResults/
 *.trx
+artifacts/screenshots/
 
 ## Local .NET SDK install
 .dotnet/

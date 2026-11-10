@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dynamically Rendered Form</title>
+</head>
+<body>
+    <h2>Form Rendering Container</h2>
+    <div id="loading-spinner">Loading form components...</div>
+    <div id="dynamic-form-container"></div>
+
+    <script>
+        // Simulate single-page application (SPA) delayed asynchronous rendering
+        setTimeout(function() {
+            var container = document.getElementById("dynamic-form-container");
+            container.innerHTML = `
+                <form id="spa-form">
+                    <div class="row">
+                        <label for="dyn_first_name">First Name</label>
+                        <input id="dyn_first_name" type="text" name="dyn_fname" placeholder="Enter First Name" />
+                    </div>
+                    <div class="row">
+                        <fieldset>
+                            <legend>Select Gender</legend>
+                            <label><input type="radio" name="dyn_gender" value="Male" /> Male</label>
+                            <label><input type="radio" name="dyn_gender" value="Female" /> Female</label>
+                        </fieldset>
+                    </div>
+                    <div class="row">
+                        <label for="dyn_state">State</label>
+                        <select id="dyn_state" name="dyn_state_sel">
+                            <option value="">-- Choose State --</option>
+                            <option value="India">India</option>
+                            <option value="California">California</option>
+                        </select>
+                    </div>
+                </form>
+            `;
+            var spinner = document.getElementById("loading-spinner");
+            if (spinner) spinner.style.display = "none";
+        }, 1200);
+    </script>
+</body>
+</html>
+

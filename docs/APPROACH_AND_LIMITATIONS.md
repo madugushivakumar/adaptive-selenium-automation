@@ -38,19 +38,29 @@ Text signals are normalized by stripping punctuation, expanding word boundaries,
 4. Token overlap scoring
 
 #### Multi-Signal Candidate Scoring Matrix
-Scores are computed using calibrated weights:
-- Associated Label Match: 40 points
-- Accessible Name / ARIA: 35 points
-- Contextual Proximity Text: 25 points
-- Placeholder Match: 20 points
-- Technical Type Match: 15 points
-- Container Relevance: 15 points
-- Contradictory Keyword Penalty: -50 points
+Scores are computed dynamically using calibrated weights and bounded in $[0.0, 100.0]$:
+- Associated Label Match: 45.0 points
+- Accessible Name / ARIA: 35.0 points
+- Contextual Proximity Text: 15.0 points
+- Placeholder Match: 15.0 points
+- Technical Type Match: 15.0 points
+- Attribute Name Match (Fallback): 10.0 points
+- Container Relevance: 10.0 points
+- Contradictory Keyword Penalty: -50.0 points
+
+For a detailed mathematical proof and candidate trace, see [Confidence Scoring Audit](file:///c:/Users/Madugu%20Shiva%20Kumar/OneDrive/图片/Desktop/adaptive-selenium-automation/docs/CONFIDENCE_SCORING_AUDIT.md).
 
 #### Ambiguity Detection and Safety Guards
 Conventional scripts suffer from silent wrong-field interactions (e.g., typing a First Name into Last Name because both matched `*Name*`). Our framework calculates the score delta between the top two candidates:
 $$\Delta = |S_{\text{top}} - S_{\text{runner-up}}|$$
 If $\Delta \le \text{AmbiguityMargin}$ (default 5 points), the framework rejects the match with an **Ambiguous** status. A controlled failure with diagnostic telemetry is strictly preferred over corrupting application data.
+
+#### Strict Post-Interaction DOM Assertions
+Rather than assuming Selenium's `SendKeys` or `Click` mutated the application state, all actions execute strict DOM verification:
+- `TextFieldActions`: Asserts `.GetAttribute("value")` or `.GetDomProperty("value")` contains the entered text.
+- `RadioGroupActions`: Asserts `radio.Selected == true`.
+- `DropdownActions`: Asserts `selectedOption.Text` or `.GetAttribute("value")` matches the selected option.
+Any discrepancy immediately throws `InvalidOperationException` to prevent false passes.
 
 ---
 
@@ -96,3 +106,4 @@ While the framework exhibits high resilience against layout, attribute, and stru
 ## 3. Engineering Conclusion
 
 The framework demonstrates that **deterministic, semantic-first automation** provides significant resilience advantages over traditional locator scripts without requiring unpredictable AI API dependencies. By enforcing strict confidence thresholds and ambiguity safeguards, it achieves both resilience and safety.
+

@@ -21,6 +21,17 @@ public class DropdownActions
 
     public string SelectOption(ElementCandidate candidate, string targetOption)
     {
+        // 1. Eligibility validation
+        if (!candidate.IsEnabled || !candidate.Element.Enabled)
+        {
+            throw new InvalidElementStateException($"Dropdown candidate '{candidate}' is disabled and cannot be selected.");
+        }
+
+        if (!candidate.IsVisible || !candidate.Element.Displayed)
+        {
+            throw new ElementNotInteractableException($"Dropdown candidate '{candidate}' is hidden and cannot be interacted with.");
+        }
+
         var selectElement = new SelectElement(candidate.Element);
         var options = selectElement.Options;
 

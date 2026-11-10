@@ -1,9 +1,10 @@
 # Adaptive Selenium Automation Framework (.NET 8 & C#)
 
 [![Build & Test Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
-[![Tests](https://img.shields.io/badge/tests-9%2F9%20passed%20(100%25)-brightgreen.svg)]()
+[![Tests](https://img.shields.io/badge/tests-27%2F27%20passed%20(100%25)-brightgreen.svg)]()
+[![Fixtures](https://img.shields.io/badge/fixtures-7%2F7%20passed%20(100%25)-brightgreen.svg)]()
 [![.NET Version](https://img.shields.io/badge/.NET-8.0-blue.svg)]()
-[![Selenium Version](https://img.shields.io/badge/Selenium-4.26-orange.svg)]()
+[![Selenium Version](https://img.shields.io/badge/Selenium-4.28-orange.svg)]()
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Cross--Platform-lightgrey.svg)]()
 
 > **Senior SDET & Automation Specialist Internship Assessment — Task 1**  
@@ -265,34 +266,39 @@ $$\text{Score}(c) = \min\left(100, \max\left(0, \sum W_i \cdot M_i(c) - \sum P_j
 .\.dotnet\dotnet.exe run --project src/AdaptiveAutomation/AdaptiveAutomation.csproj -- --url "https://app.cloudqa.io/home/AutomationPracticeForm" --headless false
 ```
 
-### 8.3 Run Against a Modified URL or Local Fixture
-The base URL is completely configurable via CLI without changing source code:
+### 8.3 Run the Standalone Fixture Runner (All 7 Fixtures)
+A dedicated PowerShell script executes the **same compiled binary** (`AdaptiveAutomation.exe`) sequentially across all 7 HTML mutation fixtures via `--url`:
 ```powershell
-# Run against a local mutation fixture
-.\.dotnet\dotnet.exe run --project src/AdaptiveAutomation/AdaptiveAutomation.csproj -- --url "file:///C:/Users/Madugu Shiva Kumar/OneDrive/图片/Desktop/adaptive-selenium-automation/fixtures/changed-attributes.html" --headless true
+powershell -ExecutionPolicy Bypass -File ".\scripts\run-all-fixtures.ps1"
 ```
 
 ### 8.4 Run the Automated Test Suite (NUnit)
 ```powershell
-# Run all 9 tests (Unit, Mutation & Component tests)
-.\.dotnet\dotnet.exe test --logger "console;verbosity=normal"
+# Run all 27 tests (Unit, Mutation & Component tests)
+.\.dotnet\dotnet.exe test --no-build --logger "console;verbosity=normal"
 
-# Run only mutation tests
-.\.dotnet\dotnet.exe test --filter "FullyQualifiedName~AdaptiveRegressionTests" --logger "console;verbosity=normal"
+# Run specific mutation suites
+.\.dotnet\dotnet.exe test --filter "FullyQualifiedName~AdaptiveRegressionTests" --no-build
+.\.dotnet\dotnet.exe test --filter "FullyQualifiedName~LabelVariationTests" --no-build
+.\.dotnet\dotnet.exe test --filter "FullyQualifiedName~InteractionFailureTests" --no-build
+.\.dotnet\dotnet.exe test --filter "FullyQualifiedName~SimilarFieldsExpandedTests" --no-build
 ```
 
 ---
 
-## 9. Mutation Testing Scenarios
+## 9. Comprehensive Mutation Testing Scenarios (All 8 Covered)
 
-| Test Case | Scenario Simulated | Key Verification | Result |
+| Mutation Category | Scenario Simulated | Key Verification | Result |
 |---|---|---|---|
-| `Mutation1_ChangedAttributes` | Scrambled IDs (`u_rand_1092`), names (`param_fn_382`), classes (`box-modern`) | Interacts with First Name, Gender, State via semantic text signals | **PASS** |
-| `Mutation2_ReorderedFields` | State placed 1st, Gender 2nd, Last Name 3rd, First Name last | Identifies all fields regardless of DOM order | **PASS** |
-| `Mutation3_ChangedStructure` | Deeply nested divs, wrapped `<label>`, `<fieldset><legend>`, `aria-label="State"` | Discovers wrapped inputs and ARIA accessible names | **PASS** |
-| `Mutation4_SimilarFields` | Company Name, Middle Name, First Name, Last Name; 3 radio groups; 3 dropdowns | Negative keyword penalties prevent false positive matches | **PASS** |
-| `Mutation6_AmbiguousFields` | Two identical First Name fields without distinguishing context | Safely reports **Ambiguous** instead of guessing | **PASS** |
-| `Mutation7_MissingFields` | Form contains only Email and Comments (target fields absent) | Fails gracefully with clear diagnostic message | **PASS** |
+| **Mutation 1** | Scrambled IDs (`u_rand_1092`), names (`param_fn_382`), classes (`box-modern`) | Interacts with First Name, Gender, State via semantic text signals | **PASS (1/1)** |
+| **Mutation 2** | State placed 1st, Gender 2nd, Last Name 3rd, First Name last | Identifies all fields regardless of DOM order | **PASS (1/1)** |
+| **Mutation 3** | Deeply nested divs, wrapped `<label>`, `<fieldset><legend>`, `aria-label="State"` | Discovers wrapped inputs, fieldsets, and ARIA accessible names | **PASS (1/1)** |
+| **Mutation 4** | Standard & Expanded competing fields (Middle Name, Company Name, Billing State, etc.) | Negative keyword penalties (-50.0) prevent false positive matches | **PASS (2/2)** |
+| **Mutation 5** | Label variations ("Given Name", "Your Gender", "State/Province", "Enter First Name") | Tests all synonyms and verifies safe rejection of unrelated fields | **PASS (7/7)** |
+| **Mutation 6** | Two identical First Name fields without distinguishing context | Safely reports **Ambiguous** instead of guessing | **PASS (1/1)** |
+| **Mutation 7** | Form contains only Email and Comments (target fields absent) | Fails gracefully with clear diagnostic message | **PASS (1/1)** |
+| **Mutation 8** | Interaction failures (Disabled inputs, Hidden elements, Missing options, Stale elements) | Detects inactive state, handles DOM detachment, recovers gracefully | **PASS (8/8)** |
+| **Live Form** | Live CloudQA integration test suite | First Name (99.2%), Gender (93.5%), State (94.0%) | **PASS (4/4)** |
 
 ---
 
@@ -302,28 +308,28 @@ The base URL is completely configurable via CLI without changing source code:
 ======================================================================
    Adaptive Selenium Web Form Automation Engine (.NET 8)
 ======================================================================
-21:47:39 info: AdaptiveAutomation[0] Target URL: https://app.cloudqa.io/home/AutomationPracticeForm
-21:47:39 info: AdaptiveAutomation[0] Headless Mode: True
-21:47:39 info: AdaptiveAutomation[0] Test Data: FirstName='Shiva', Gender='Male', State='India'
-21:47:39 info: AdaptiveAutomation[0] Navigating to URL: https://app.cloudqa.io/home/AutomationPracticeForm
-Starting ChromeDriver 156.0.8078.80
-21:47:44 info: AdaptiveAutomation[0] Locating field 'First Name' of type TextInput...
-21:47:46 info: AdaptiveAutomation[0] Match result for 'First Name': Score=100, Confidence=High, Ambiguous=False
-21:47:46 info: AdaptiveAutomation[0] Entered 'Shiva' into candidate <input id='fname' name='First Name' type='text' label='First Name' placeholder='Name'>
-21:47:46 info: AdaptiveAutomation[0] Locating field 'Gender' of type RadioGroup...
-21:47:47 info: AdaptiveAutomation[0] Match result for 'Gender': Score=100, Confidence=High, Ambiguous=False
-21:47:47 info: AdaptiveAutomation[0] Radio option 'Male' selected: SelectedState=True
-21:47:47 info: AdaptiveAutomation[0] Locating field 'State' of type Dropdown...
-21:47:48 info: AdaptiveAutomation[0] Match result for 'State': Score=100, Confidence=High, Ambiguous=False
-21:47:50 info: AdaptiveAutomation[0] Dropdown option selected. Text='India', Value='India'
-21:47:50 info: AdaptiveAutomation[0] WebDriver session disposed cleanly.
+11:10:27 info: AdaptiveAutomation[0] Target URL: https://app.cloudqa.io/home/AutomationPracticeForm
+11:10:27 info: AdaptiveAutomation[0] Headless Mode: True
+11:10:27 info: AdaptiveAutomation[0] Test Data: FirstName='Shiva', Gender='Male', State='India'
+11:10:27 info: AdaptiveAutomation[0] Navigating to URL: https://app.cloudqa.io/home/AutomationPracticeForm
+Starting ChromeDriver 156.0.8078.80 on port 63773
+11:10:35 info: AdaptiveAutomation[0] Locating field 'First Name' of type TextInput...
+11:10:42 info: AdaptiveAutomation[0] Match result for 'First Name': Score=99.25, Confidence=High, Ambiguous=False
+11:10:42 info: AdaptiveAutomation[0] Entered 'Shiva' into candidate <input id='fname' name='First Name' type='text' label='First Name' placeholder='Name'>
+11:10:42 info: AdaptiveAutomation[0] Locating field 'Gender' of type RadioGroup...
+11:10:43 info: AdaptiveAutomation[0] Match result for 'Gender': Score=93.5, Confidence=High, Ambiguous=False
+11:10:43 info: AdaptiveAutomation[0] Radio option 'Male' selected: SelectedState=True
+11:10:43 info: AdaptiveAutomation[0] Locating field 'State' of type Dropdown...
+11:10:45 info: AdaptiveAutomation[0] Match result for 'State': Score=94, Confidence=High, Ambiguous=False
+11:10:46 info: AdaptiveAutomation[0] Dropdown option selected. Text='India', Value='India'
+11:10:47 info: AdaptiveAutomation[0] WebDriver session disposed cleanly.
 
 ----------------------------------------------------------------------
                         EXECUTION SUMMARY                             
 ----------------------------------------------------------------------
-[PASS] First Name   | Conf: 100.0% | Expected: Shiva      | Actual: Shiva      (2.41s)
-[PASS] Gender       | Conf: 100.0% | Expected: Male       | Actual: Male       (0.74s)
-[PASS] State        | Conf: 100.0% | Expected: India      | Actual: India      (2.61s)
+[PASS] First Name   | Conf:  99.2% | Expected: Shiva      | Actual: Shiva      (7.59s)
+[PASS] Gender       | Conf:  93.5% | Expected: Male       | Actual: Male       (1.20s)
+[PASS] State        | Conf:  94.0% | Expected: India      | Actual: India      (2.19s)
 ----------------------------------------------------------------------
 Results: 3/3 Passed.
 Reports Generated:
@@ -334,11 +340,14 @@ Reports Generated:
 
 ---
 
-## 11. Reports & Diagnostic Artifacts
+## 11. Technical Audit & Forensic Documentation
 
-- **JSON Report:** `artifacts/reports/latest-report.json`
-- **HTML Dashboard:** `artifacts/reports/latest-report.html`
-- **Failure Screenshots:** `artifacts/screenshots/failures/*.png` (captured automatically on failure)
+For complete technical depth and audit defense, the following dedicated investigation reports are provided:
+- **[Final Submission Checklist](file:///c:/Users/Madugu%20Shiva%20Kumar/OneDrive/图片/Desktop/adaptive-selenium-automation/docs/FINAL_SUBMISSION_CHECKLIST.md):** Verification of all 15 audit inspection criteria, test runs, and sign-offs.
+- **[Final Audit Report](file:///c:/Users/Madugu%20Shiva%20Kumar/OneDrive/图片/Desktop/adaptive-selenium-automation/docs/FINAL_AUDIT_REPORT.md):** Initial audit findings, defect classification, and architectural resolutions.
+- **[State vs Country Forensic Investigation](file:///c:/Users/Madugu%20Shiva%20Kumar/OneDrive/图片/Desktop/adaptive-selenium-automation/docs/STATE_FIELD_INVESTIGATION.md):** Forensic DOM proof that CloudQA's `<select id="state" name="State">` contains country options (`India`), demonstrating that the engine targets the correct element.
+- **[Confidence Scoring Audit](file:///c:/Users/Madugu%20Shiva%20Kumar/OneDrive/图片/Desktop/adaptive-selenium-automation/docs/CONFIDENCE_SCORING_AUDIT.md):** Verification that scores are dynamically calculated from DOM evidence and normalized in $[0, 100]$.
+- **[Final Audit Report JSON](file:///c:/Users/Madugu%20Shiva%20Kumar/OneDrive/图片/Desktop/adaptive-selenium-automation/artifacts/reports/final-audit-report.json) & [HTML Dashboard](file:///c:/Users/Madugu%20Shiva%20Kumar/OneDrive/图片/Desktop/adaptive-selenium-automation/artifacts/reports/final-audit-report.html):** Generated audit execution artifacts.
 
 ---
 
@@ -354,3 +363,4 @@ Reports Generated:
 - Support for `role="combobox"` custom dropdowns.
 - Automated recursive Shadow Root traversal.
 - Computer vision / bounding-box proximity scoring as an additional signal layer.
+

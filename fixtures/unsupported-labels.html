@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Unsupported Labels Form</title>
+</head>
+<body>
+    <form id="unrelated-survey">
+        <div class="row">
+            <label for="fld_book">Favorite Book</label>
+            <input id="fld_book" type="text" name="favorite_book" placeholder="Enter book title" />
+        </div>
+
+        <div class="row">
+            <label for="fld_shoe">Shoe Size</label>
+            <input id="fld_shoe" type="text" name="shoe_size" placeholder="Shoe Size" />
+        </div>
+
+        <div class="row">
+            <fieldset>
+                <legend>Operating System</legend>
+                <label><input type="radio" name="os_choice" value="Windows" /> Windows</label>
+                <label><input type="radio" name="os_choice" value="Linux" /> Linux</label>
+                <label><input type="radio" name="os_choice" value="macOS" /> macOS</label>
+            </fieldset>
+        </div>
+
+        <div class="row">
+            <label for="fld_timezone">Preferred Timezone</label>
+            <select id="fld_timezone" name="selected_timezone">
+                <option value="UTC">UTC (Coordinated Universal Time)</option>
+                <option value="PST">PST (Pacific Standard Time)</option>
+                <option value="IST">IST (Indian Standard Time)</option>
+            </select>
+        </div>
+    </form>
+</body>
+</html>
+

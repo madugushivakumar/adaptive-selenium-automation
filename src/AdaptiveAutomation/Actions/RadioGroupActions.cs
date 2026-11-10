@@ -62,6 +62,17 @@ public class RadioGroupActions
             throw new NoSuchElementException($"Option '{targetOption}' not found in radio group. Available options: [{available}]");
         }
 
+        // Check if option is disabled
+        if (!matchingRadio.Enabled)
+        {
+            throw new InvalidElementStateException($"Radio option '{targetOption}' in group '{candidate}' is disabled and cannot be selected.");
+        }
+
+        if (!matchingRadio.Displayed)
+        {
+            throw new ElementNotInteractableException($"Radio option '{targetOption}' in group '{candidate}' is hidden and cannot be interacted with.");
+        }
+
         WaitHelper.Retry(() =>
         {
             ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].scrollIntoView({block: 'center'});", matchingRadio);
@@ -84,6 +95,11 @@ public class RadioGroupActions
             // Try JS click once more if standard click didn't trigger
             ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].click();", matchingRadio);
             isSelected = matchingRadio.Selected;
+        }
+
+        if (!isSelected)
+        {
+            throw new InvalidOperationException($"Failed to select radio option '{targetOption}' in group '{candidate}'. Selected state remained false.");
         }
 
         _logger?.LogInformation("Radio option '{Option}' selected: SelectedState={State}", selectedOptionLabel, isSelected);

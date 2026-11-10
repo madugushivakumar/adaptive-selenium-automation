@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Label Variations Form - Variation 1</title>
+</head>
+<body>
+    <h2>Form Variation 1: Given Name, Select Gender, State/Province</h2>
+    <form id="form-variation-1">
+        <div class="row">
+            <label for="fld_given_name">Given Name</label>
+            <input id="fld_given_name" type="text" name="user_given_name" placeholder="Given Name" />
+        </div>
+        <div class="row">
+            <fieldset>
+                <legend>Select Gender</legend>
+                <label><input type="radio" name="grp_sex" value="Male" /> Male</label>
+                <label><input type="radio" name="grp_sex" value="Female" /> Female</label>
+            </fieldset>
+        </div>
+        <div class="row">
+            <label for="fld_province">State/Province</label>
+            <select id="fld_province" name="geo_province">
+                <option value="">-- Choose --</option>
+                <option value="India">India</option>
+                <option value="California">California</option>
+            </select>
+        </div>
+    </form>
+</body>
+</html>

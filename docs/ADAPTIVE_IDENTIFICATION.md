@@ -84,17 +84,20 @@ Each candidate receives an auditable score evaluated against weighted heuristics
 
 | Signal Identifier | Weight | Description |
 |---|---|---|
-| `ExactAssociatedLabelMatch` | **35** | Directly associated `<label for="...">` matching a field synonym. |
-| `ExactAccessibleNameMatch` | **30** | `aria-label`, `aria-labelledby`, or accessible name match. |
-| `StrongContextualTextMatch`| **25** | Enclosing container label, legend, or preceding sibling match. |
-| `PlaceholderMatch` | **20** | `placeholder` attribute matching field semantic concept. |
-| `TechnicalTypeMatch` | **15** | Control matches expected element tag and input type. |
-| `ContainerRelevance` | **10** | Surrounding form container contains related keyword context. |
+| `AssociatedLabelMatch` | **45** | Directly associated `<label for="...">` or enclosing `<label>` matching a field synonym. |
+| `AccessibleNameMatch` | **35** | `aria-label`, `aria-labelledby`, or W3C accessible name match. |
+| `ContextualTextMatch` | **15** | Enclosing container label, legend, or preceding sibling match. |
+| `PlaceholderMatch` | **15** | `placeholder` attribute matching field semantic concept. |
+| `TechnicalTypeMatch` | **15** | Control matches expected element tag and input type (`input[type=text]`, `radio-group`, `select`). |
+| `AttributeNameMatch` | **10** | `name` or `id` attribute matching field synonyms (fallback). |
+| `ContainerRelevance` | **10** | Fieldset legend, form group, or wrapper structure matching field context. |
 | `ContradictoryPenalty` | **-50** | Element contains conflicting semantic keywords (e.g., contains `"last"`, `"sur"`, `"middle"`, `"company"` when searching for `"first name"`). |
 
 ### Mathematical Formulation
-$$\text{Score}(c) = \min\left(100, \max\left(0, \sum_{i} W_i \cdot M_i(c) - \sum_{j} P_j \cdot C_j(c)\right)\right)$$
-Where $W_i$ is the weight of positive signal $i$, $M_i(c) \in \{0, 1\}$ indicates signal match, $P_j$ is penalty weight, and $C_j(c)$ indicates contradictory signal match.
+$$\text{Score}(c) = \min\left(100.0, \max\left(0.0, \sum_{i} W_i \cdot M_i(c) - \sum_{j} P_j \cdot C_j(c)\right)\right)$$
+Where $W_i$ is the weight of positive signal $i$, $M_i(c) \in [0.0, 1.0]$ indicates normalized signal match ratio, $P_j$ is penalty weight ($50.0$), and $C_j(c) \in \{0, 1\}$ indicates contradictory signal match. Bounded dynamically in $[0.0, 100.0]$.
+
+For worked mathematical candidate examples across the live form and mutation fixtures, refer to [Confidence Scoring Audit](file:///c:/Users/Madugu%20Shiva%20Kumar/OneDrive/图片/Desktop/adaptive-selenium-automation/docs/CONFIDENCE_SCORING_AUDIT.md).
 
 ---
 
