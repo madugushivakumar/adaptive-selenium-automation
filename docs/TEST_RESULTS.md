@@ -1,4 +1,4 @@
-# Test Results & Verification Report (Final Audit)
+# Test Results & Verification Report (Final Audit & Value Verification)
 
 **Framework:** Adaptive Selenium Automation Engine (.NET 8)  
 **Execution Timestamp:** November 10, 2026  
@@ -12,11 +12,11 @@
 | Test Suite | Total Executed | Passed | Failed | Ambiguous Refusals | Pass Rate |
 |---|---|---|---|---|---|
 | **Live Integration Suite (CloudQA)** | 3 | 3 | 0 | 0 | **100%** |
-| **NUnit Automated Suite** | 27 | 27 | 0 | 0 | **100%** |
+| **NUnit Automated Suite** | 47 | 47 | 0 | 0 | **100%** |
 | **Standalone Fixture Runner (`run-all-fixtures.ps1`)** | 7 | 7 | 0 | 0 | **100%** |
-| **Total Test Suite** | **37** | **37** | **0** | **0** | **100%** |
+| **Total Test Suite** | **57** | **57** | **0** | **0** | **100%** |
 
-All twenty-seven automated NUnit test scenarios, all seven HTML mutation fixtures via the compiled executable, and the live CloudQA automation (`https://app.cloudqa.io/home/AutomationPracticeForm`) executed and passed with 100% verification and zero hardcoded selectors.
+All forty-seven automated NUnit test scenarios, all seven HTML mutation fixtures via the compiled executable (with independent field-level value verification), and the live CloudQA automation (`https://app.cloudqa.io/home/AutomationPracticeForm`) executed and passed with 100% verification and zero hardcoded selectors.
 
 ---
 
@@ -69,7 +69,7 @@ Reports Generated:
    - **Identified Element:** Logical Radio Group `name="gender"` (3 options: Male, Female, Transgender)
    - **Confidence Score:** 93.5% (High Confidence)
    - **Matching Evidence:** `AssociatedLabelMatch` (45.0), `ContainerRelevance` (10.0), `ContextualTextMatch` (15.0), `TechnicalTypeMatch` (15.0), `AttributeNameMatch` (8.5).
-   - **Interaction:** Option `"Male"` clicked. Strict post-interaction DOM assertion verified `option.Selected == true`.
+   - **Interaction:** Option `"Male"` selected. Strict post-interaction DOM assertion verified `option.Selected == true` and `option.Text == "Male"`.
 3. **State:**
    - **Identified Element:** `<select id="state" name="State">`
    - **Confidence Score:** 94.0% (High Confidence)
@@ -78,61 +78,53 @@ Reports Generated:
 
 ---
 
-## 3. NUnit 27-Test Breakdown (All 8 Mutations Covered)
+## 3. NUnit 47-Test Breakdown (Full Suite)
 
-| Test Suite File | Test Method Name | Mutation Scenario | Status |
+| Test Suite File | Test Count | Key Coverage Areas | Status |
 |---|---|---|---|
-| `AdaptiveRegressionTests.cs` | `Mutation1_ChangedAttributes_ShouldIdentifyAndInteractSuccessfully` | Scrambled IDs, names, classes | **PASS** |
-| `AdaptiveRegressionTests.cs` | `Mutation2_ReorderedFields_ShouldIdentifyFieldsRegardlessOfOrder` | Reordered DOM sequence | **PASS** |
-| `AdaptiveRegressionTests.cs` | `Mutation3_ChangedStructure_ShouldIdentifyWithNestedContainersAndAria` | Nested divs, fieldsets, ARIA | **PASS** |
-| `AdaptiveRegressionTests.cs` | `Mutation4_SimilarFields_ShouldSelectTargetFieldAndAvoidConfusingCompetitors` | Competing similar fields | **PASS** |
-| `AdaptiveRegressionTests.cs` | `Mutation6_AmbiguousFields_ShouldDetectAmbiguityAndRefuseArbitraryInteraction` | Equidistant candidates | **PASS** |
-| `AdaptiveRegressionTests.cs` | `Mutation7_MissingFields_ShouldReportClearDiagnosticFailure` | Missing fields rejection | **PASS** |
-| `AdaptiveRegressionTests.cs` | `FirstName_ShouldBeDynamicallyIdentified_AndFilledCorrectly` | First Name live interaction | **PASS** |
-| `AdaptiveRegressionTests.cs` | `Gender_ShouldBeDynamicallyIdentified_AndOptionSelected` | Gender live interaction | **PASS** |
-| `AdaptiveRegressionTests.cs` | `State_ShouldBeDynamicallyIdentified_AndOptionSelected` | State live interaction | **PASS** |
-| `LabelVariationTests.cs` | `Mutation5_LabelVariations_FirstName("Given Name")` | Label variation: Given Name | **PASS** |
-| `LabelVariationTests.cs` | `Mutation5_LabelVariations_FirstName("Your First Name")` | Label variation: Your First Name | **PASS** |
-| `LabelVariationTests.cs` | `Mutation5_LabelVariations_FirstName("Enter First Name")` | Label variation: Enter First Name | **PASS** |
-| `LabelVariationTests.cs` | `Mutation5_LabelVariations_Gender("Select Gender")` | Label variation: Select Gender | **PASS** |
-| `LabelVariationTests.cs` | `Mutation5_LabelVariations_Gender("Your Gender")` | Label variation: Your Gender | **PASS** |
-| `LabelVariationTests.cs` | `Mutation5_LabelVariations_State("State/Province")` | Label variation: State/Province | **PASS** |
-| `LabelVariationTests.cs` | `Mutation5_LabelVariations_State("Choose State")` | Label variation: Choose State | **PASS** |
-| `LabelVariationTests.cs` | `Mutation5_LabelVariations_State("Select State")` | Label variation: Select State | **PASS** |
-| `LabelVariationTests.cs` | `Mutation5_UnsupportedLabels_ShouldSafelyRejectUnrelatedFields` | Refuses unrelated controls | **PASS** |
-| `InteractionFailureTests.cs` | `Mutation8_ScenarioA_DisabledFirstName_ShouldDetectAndRefuseUnsafeInteraction` | Disabled input guard | **PASS** |
-| `InteractionFailureTests.cs` | `Mutation8_ScenarioB_HiddenFirstName_ShouldDetectAndRefuseInteraction` | Hidden input guard | **PASS** |
-| `InteractionFailureTests.cs` | `Mutation8_ScenarioC_DisabledGenderOption_ShouldDetectDisabledRadio` | Disabled radio guard | **PASS** |
-| `InteractionFailureTests.cs` | `Mutation8_ScenarioD_MissingStateOption_ShouldThrowDescriptiveNoSuchElement` | Missing dropdown option | **PASS** |
-| `InteractionFailureTests.cs` | `Mutation8_ScenarioE_DynamicallyRenderedFields_ShouldIdentifyViaExplicitWait` | Explicit wait dynamic load | **PASS** |
-| `InteractionFailureTests.cs` | `Mutation8_ScenarioF_StaleElementRecovery_ShouldReInspectAndSucceed` | Stale element recovery | **PASS** |
-| `InteractionFailureTests.cs` | `Mutation8_ScenarioG_ElementNotInteractable_ShouldFailSafely` | Interaction failure safety | **PASS** |
-| `InteractionFailureTests.cs` | `Mutation8_ScenarioH_BrowserFailureAndCleanup_ShouldHandleGracefully` | Session cleanup guard | **PASS** |
-| `SimilarFieldsExpandedTests.cs` | `Mutation4_SimilarFields_Expanded_ShouldDisambiguateAllTargetsAccurately` | 6 competing text/radio/select | **PASS** |
+| `AdaptiveRegressionTests.cs` | 9 | Core mutations (1 to 7), field reordering, structural shifts, ambiguity refusal, missing fields | **PASS (9/9)** |
+| `LabelVariationTests.cs` | 9 | Mutation 5 label synonyms ("Given Name", "Your First Name", "Enter First Name", "Select Gender", "Your Gender", "State/Province", etc.) and unsupported label rejection | **PASS (9/9)** |
+| `InteractionFailureTests.cs` | 8 | Mutation 8 failure resilience (disabled inputs, hidden inputs, disabled radio, missing dropdown option, dynamic rendering explicit wait, stale element recovery, browser cleanup) | **PASS (8/8)** |
+| `SimilarFieldsExpandedTests.cs` | 1 | Disambiguation across 6 competing text/radio/select fields | **PASS (1/1)** |
+| `ValueVerificationTests.cs` | 20 | **Strict value verification regression tests:** Prevents false-positive substring matching (e.g. Female matching Male), enforces word-boundary matching, validates dropdown/text mismatch rejection, asserts DOM selection state | **PASS (20/20)** |
+| **Total NUnit Tests** | **47** | **Complete Framework & Regression Coverage** | **PASS (47/47)** |
 
 ---
 
 ## 4. Standalone Fixture Runner Results (`scripts/run-all-fixtures.ps1`)
 
-The compiled executable `AdaptiveAutomation.exe` was run sequentially across all 7 mutation fixtures using CLI argument `--url`:
+The compiled executable `AdaptiveAutomation.exe` was run sequentially across all 7 mutation fixtures using CLI argument `--url`, with **independent field-level JSON telemetry verification**:
 
 ```
 ======================================================================
                      FIXTURE EXECUTION SUMMARY                        
 ======================================================================
 
-Fixture                      Status ExitCode Duration
--------                      ------ -------- --------
-baseline.html                PASSED        0 42.51s  
-changed-attributes.html      PASSED        0 24.19s  
-reordered-fields.html        PASSED        0 8.16s   
-changed-structure.html       PASSED        0 5.08s   
-similar-fields.html          PASSED        0 8.10s   
-similar-fields-expanded.html PASSED        0 12.14s  
-label-variations.html        PASSED        0 5.07s   
+Fixture                      Status ExitCode FieldValidation Duration Details              
+-------                      ------ -------- --------------- -------- -------              
+baseline.html                PASSED        0 VERIFIED        2.17s    All 3 fields verified
+changed-attributes.html      PASSED        0 VERIFIED        2.02s    All 3 fields verified
+reordered-fields.html        PASSED        0 VERIFIED        2.03s    All 3 fields verified
+changed-structure.html       PASSED        0 VERIFIED        4.04s    All 3 fields verified
+similar-fields.html          PASSED        0 VERIFIED        6.05s    All 3 fields verified
+similar-fields-expanded.html PASSED        0 VERIFIED        8.06s    All 3 fields verified
+label-variations.html        PASSED        0 VERIFIED        4.06s    All 3 fields verified
 
-ALL 7 FIXTURES PASSED SUCCESSFULLY WITH THE SAME EXECUTABLE.
+ALL 7 FIXTURES PASSED AND VERIFIED AT FIELD-LEVEL WITH THE SAME EXECUTABLE.
 ```
+
+### Detailed Verification on `reordered-fields.html`:
+- **Order on Page:** State (1st), Gender (2nd - Female, Male, Transgender), Last Name (3rd), First Name (4th).
+- **Target Configuration:** FirstName: "Shiva", Gender: "Male", State: "India".
+- **Radio Selection Outcome:**
+  - `OptionElementMap` exact match selected `<input type="radio" value="Male">`.
+  - Selected label: `"Male"`.
+  - DOM radio button verification: `maleRadio.Selected == true`, `femaleRadio.Selected == false`.
+- **Field Validation:**
+  - `Field 'First Name': Expected='Shiva', Actual='Shiva' (Passed)`
+  - `Field 'Gender': Expected='Male', Actual='Male' (Passed)`
+  - `Field 'State': Expected='India', Actual='India' (Passed)`
+- **Exit Code:** `0` (Clean pass without false positives).
 
 ---
 

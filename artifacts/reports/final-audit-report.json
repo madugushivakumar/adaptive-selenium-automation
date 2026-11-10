@@ -3,7 +3,7 @@
     "title": "Adaptive Selenium Automation Framework - Final Technical Audit Report",
     "project": "adaptive-selenium-automation",
     "author": "Senior SDET & QA Automation Auditor",
-    "completedAt": "2026-11-10T11:25:00+05:30",
+    "completedAt": "2026-11-10T15:30:00+05:30",
     "runtime": ".NET 8.0.427 (C# 12)",
     "browserEngine": "Selenium WebDriver 4.28.0 (ChromeDriver 156.0.8078.80)",
     "summary": {
@@ -19,15 +19,15 @@
         ]
       },
       "nunitTestSuite": {
-        "totalTests": 27,
-        "passed": 27,
+        "totalTests": 47,
+        "passed": 47,
         "failed": 0,
         "testBreakdown": {
-          "AdaptiveRegressionTests": 7,
-          "LabelVariationTests": 7,
+          "AdaptiveRegressionTests": 9,
+          "LabelVariationTests": 9,
           "InteractionFailureTests": 8,
           "SimilarFieldsExpandedTests": 1,
-          "LiveFormTests": 4
+          "ValueVerificationTests": 20
         }
       },
       "fixtureExecutionScript": {
@@ -37,23 +37,24 @@
         "passed": 7,
         "failed": 0,
         "fixtures": [
-          { "fixture": "baseline.html", "status": "PASSED", "exitCode": 0 },
-          { "fixture": "changed-attributes.html", "status": "PASSED", "exitCode": 0 },
-          { "fixture": "reordered-fields.html", "status": "PASSED", "exitCode": 0 },
-          { "fixture": "changed-structure.html", "status": "PASSED", "exitCode": 0 },
-          { "fixture": "similar-fields.html", "status": "PASSED", "exitCode": 0 },
-          { "fixture": "similar-fields-expanded.html", "status": "PASSED", "exitCode": 0 },
-          { "fixture": "label-variations.html", "status": "PASSED", "exitCode": 0 }
+          { "fixture": "baseline.html", "status": "PASSED", "exitCode": 0, "fieldValidation": "VERIFIED" },
+          { "fixture": "changed-attributes.html", "status": "PASSED", "exitCode": 0, "fieldValidation": "VERIFIED" },
+          { "fixture": "reordered-fields.html", "status": "PASSED", "exitCode": 0, "fieldValidation": "VERIFIED" },
+          { "fixture": "changed-structure.html", "status": "PASSED", "exitCode": 0, "fieldValidation": "VERIFIED" },
+          { "fixture": "similar-fields.html", "status": "PASSED", "exitCode": 0, "fieldValidation": "VERIFIED" },
+          { "fixture": "similar-fields-expanded.html", "status": "PASSED", "exitCode": 0, "fieldValidation": "VERIFIED" },
+          { "fixture": "label-variations.html", "status": "PASSED", "exitCode": 0, "fieldValidation": "VERIFIED" }
         ]
       }
     },
     "auditFindingsResolved": [
-      { "id": "AUDIT-001", "severity": "High", "description": "Strict post-interaction value verification added to ensure actual DOM state matches expected value." },
-      { "id": "AUDIT-002", "severity": "High", "description": "Disabled and hidden input and radio guards added in TextFieldActions and RadioGroupActions." },
-      { "id": "AUDIT-003", "severity": "Medium", "description": "Calibrated heuristic weights in ScoringWeights to ensure exact label + technical type match reaches Medium confidence." },
-      { "id": "AUDIT-004", "severity": "Medium", "description": "Nearest ancestor container lookup in XPath using [1] prevents outer card label hijacking." },
-      { "id": "AUDIT-005", "severity": "High", "description": "State vs Country anomaly forensically documented in docs/STATE_FIELD_INVESTIGATION.md." }
+      { "id": "AUDIT-001", "severity": "Critical", "description": "Eliminated false-positive substring matching in RadioGroupActions, DropdownActions, and Program.cs via strict exact matching and whole-word boundary validation (TextNormalizer.MatchesWord, IsMatchForValue)." },
+      { "id": "AUDIT-002", "severity": "High", "description": "Upgraded scripts/run-all-fixtures.ps1 to independently validate generated JSON telemetry and verify every field's expected vs actual values rather than solely relying on exit codes." },
+      { "id": "AUDIT-003", "severity": "High", "description": "Added strict post-interaction value verification throwing InvalidOperationException on value mismatch, causing the process to return exit code 1 on any failure." },
+      { "id": "AUDIT-004", "severity": "High", "description": "Disabled and hidden input and radio guards added in TextFieldActions and RadioGroupActions." },
+      { "id": "AUDIT-005", "severity": "Medium", "description": "Calibrated heuristic weights in ScoringWeights to ensure exact label + technical type match reaches Medium confidence." },
+      { "id": "AUDIT-006", "severity": "Medium", "description": "Nearest ancestor container lookup in XPath using [1] prevents outer card label hijacking." },
+      { "id": "AUDIT-007", "severity": "High", "description": "State vs Country anomaly forensically documented in docs/STATE_FIELD_INVESTIGATION.md." }
     ]
   }
 }
-

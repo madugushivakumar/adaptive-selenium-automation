@@ -37,48 +37,24 @@
 - **State:** Passed (Score: 94.0%, Actual: "India", Duration: 2.19s)
 - **Exit Code:** 0 (Clean session shutdown)
 
-### 2.2 NUnit Test Suite (27/27 Passed)
-- `AdaptiveRegressionTests`: 7/7 Passed
-  - `Mutation1_ChangedAttributes`: Passed
-  - `Mutation2_ReorderedFields`: Passed
-  - `Mutation3_ChangedStructure`: Passed
-  - `Mutation4_SimilarFields`: Passed
-  - `Mutation6_AmbiguousFields`: Passed
-  - `Mutation7_MissingFields`: Passed
-  - `Mutation8_ScenarioH_BrowserFailureAndCleanup`: Passed
-- `LabelVariationTests`: 7/7 Passed
-  - 3 First Name variations ("Given Name", "Your First Name", "Enter First Name"): Passed
-  - 2 Gender variations ("Select Gender", "Your Gender"): Passed
-  - 3 State variations ("State/Province", "Choose State", "Select State"): Passed
-  - Unsupported/Unrelated labels refusal: Passed
-- `InteractionFailureTests`: 8/8 Passed
-  - Scenario A: Disabled First Name: Passed
-  - Scenario B: Hidden First Name: Passed
-  - Scenario C: Disabled Gender option: Passed
-  - Scenario D: Missing State option: Passed
-  - Scenario E: Dynamically rendered fields: Passed
-  - Scenario F: Stale element recovery: Passed
-  - Scenario G: Non-interactable element: Passed
-  - Scenario H: Browser failure cleanup: Passed
-- `SimilarFieldsExpandedTests`: 1/1 Passed
-  - Disambiguation across 6 competing fields: Passed
-- `LiveFormTests`: 4/4 Passed
-  - First Name live identification & fill: Passed
-  - Gender live identification & select: Passed
-  - State live identification & select: Passed
-  - End-to-end full form automation: Passed
+### 2.2 NUnit Test Suite (47/47 Passed)
+- `AdaptiveRegressionTests`: 9/9 Passed (core mutations, field reordering, structural shifts, ambiguity refusal, missing fields)
+- `LabelVariationTests`: 9/9 Passed (First Name, Gender, State label variations and unsupported label rejection)
+- `InteractionFailureTests`: 8/8 Passed (Scenarios A through H)
+- `SimilarFieldsExpandedTests`: 1/1 Passed (6 competing fields disambiguation)
+- `ValueVerificationTests`: 20/20 Passed (gender selection disambiguation, strict word-boundary matching, dropdown/text value mismatch rejection, DOM selection state assertions)
 
 ### 2.3 Standalone Fixture Runner (`scripts/run-all-fixtures.ps1`)
-The **exact same compiled binary** (`AdaptiveAutomation.exe`) was executed sequentially against all 7 HTML fixtures via CLI argument `--url`:
-1. `fixtures/baseline.html` $\rightarrow$ **PASSED (ExitCode: 0)**
-2. `fixtures/changed-attributes.html` $\rightarrow$ **PASSED (ExitCode: 0)**
-3. `fixtures/reordered-fields.html` $\rightarrow$ **PASSED (ExitCode: 0)**
-4. `fixtures/changed-structure.html` $\rightarrow$ **PASSED (ExitCode: 0)**
-5. `fixtures/similar-fields.html` $\rightarrow$ **PASSED (ExitCode: 0)**
-6. `fixtures/similar-fields-expanded.html` $\rightarrow$ **PASSED (ExitCode: 0)**
-7. `fixtures/label-variations.html` $\rightarrow$ **PASSED (ExitCode: 0)**
+The **exact same compiled binary** (`AdaptiveAutomation.exe`) was executed sequentially against all 7 HTML fixtures via CLI argument `--url`, with **independent field-level JSON telemetry verification**:
+1. `fixtures/baseline.html` $\rightarrow$ **PASSED (ExitCode: 0, FieldValidation: VERIFIED)**
+2. `fixtures/changed-attributes.html` $\rightarrow$ **PASSED (ExitCode: 0, FieldValidation: VERIFIED)**
+3. `fixtures/reordered-fields.html` $\rightarrow$ **PASSED (ExitCode: 0, FieldValidation: VERIFIED - Male selected & verified)**
+4. `fixtures/changed-structure.html` $\rightarrow$ **PASSED (ExitCode: 0, FieldValidation: VERIFIED)**
+5. `fixtures/similar-fields.html` $\rightarrow$ **PASSED (ExitCode: 0, FieldValidation: VERIFIED)**
+6. `fixtures/similar-fields-expanded.html` $\rightarrow$ **PASSED (ExitCode: 0, FieldValidation: VERIFIED)**
+7. `fixtures/label-variations.html` $\rightarrow$ **PASSED (ExitCode: 0, FieldValidation: VERIFIED)**
 
-**Summary:** 7/7 Fixtures Passed without recompilation.
+**Summary:** 7/7 Fixtures Passed without recompilation and verified at field level.
 
 ---
 

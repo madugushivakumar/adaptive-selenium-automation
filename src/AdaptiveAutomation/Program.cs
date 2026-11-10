@@ -123,7 +123,13 @@ public class Program
         int passed = 0;
         foreach (var r in results)
         {
-            if (r.Status == TestStatus.Passed)
+            // Verify BOTH Status == TestStatus.Passed AND that actual value strictly matches expected value
+            bool valueVerified = r.Status == TestStatus.Passed &&
+                                 !string.IsNullOrEmpty(r.ExpectedValue) &&
+                                 !string.IsNullOrEmpty(r.ActualValue) &&
+                                 TextNormalizer.IsMatchForValue(r.ActualValue, r.ExpectedValue);
+
+            if (valueVerified)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"[PASS] {r.FieldName,-12} | Conf: {r.ConfidenceScore,5:F1}% | Expected: {r.ExpectedValue,-10} | Actual: {r.ActualValue,-10} ({r.Duration.TotalSeconds:F2}s)");
@@ -132,7 +138,8 @@ public class Program
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"[FAIL] {r.FieldName,-12} | Status: {r.Status} | Error: {r.ErrorMessage}");
+                string error = r.ErrorMessage ?? $"Value mismatch: Expected '{r.ExpectedValue}', got '{r.ActualValue}'";
+                Console.WriteLine($"[FAIL] {r.FieldName,-12} | Status: Failed | Expected: {r.ExpectedValue,-10} | Actual: {r.ActualValue,-10} | Error: {error}");
             }
         }
         Console.ResetColor();
@@ -141,7 +148,9 @@ public class Program
         Console.WriteLine($"Reports Generated:\n  - JSON: {jsonReport}\n  - HTML: {htmlReport}");
         Console.WriteLine("----------------------------------------------------------------------");
 
-        return passed == results.Count ? 0 : 1;
+        // Fail with non-zero exit code if not all 3 target fields passed with verified values
+        bool allPassed = (passed == 3 && results.Count == 3);
+        return allPassed ? 0 : 1;
     }
 
     private static TestResult ExecuteFieldTest(
@@ -153,13 +162,22 @@ public class Program
         ILogger logger)
     {
         var sw = Stopwatch.StartNew();
+        string capturedExpected = string.Empty;
+        string capturedActual = string.Empty;
+        double capturedConfidence = 0.0;
+        string capturedStrategy = "N/A";
+
         try
         {
             var (confidence, strategy, expected, actual) = testAction();
+            capturedConfidence = confidence;
+            capturedStrategy = strategy;
+            capturedExpected = expected;
+            capturedActual = actual;
             sw.Stop();
 
             // Strict value assertion
-            bool valueMatched = TextNormalizer.ExactMatch(actual, expected) || TextNormalizer.ContainsNormalized(actual, expected);
+            bool valueMatched = TextNormalizer.IsMatchForValue(actual, expected);
             if (!valueMatched)
             {
                 throw new InvalidOperationException($"Value verification failed for '{fieldName}'. Expected: '{expected}', Actual: '{actual}'.");
@@ -189,8 +207,10 @@ public class Program
                 FieldName = fieldName,
                 TargetUrl = targetUrl,
                 Status = ex.Message.Contains("Ambiguous match") ? TestStatus.Ambiguous : TestStatus.Failed,
-                ConfidenceScore = 0,
-                MatchingStrategy = "N/A",
+                ConfidenceScore = capturedConfidence,
+                MatchingStrategy = capturedStrategy,
+                ExpectedValue = capturedExpected,
+                ActualValue = capturedActual,
                 ErrorMessage = ex.Message,
                 Duration = sw.Elapsed,
                 ScreenshotPath = screenshotPath

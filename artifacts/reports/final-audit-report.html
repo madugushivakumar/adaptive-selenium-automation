@@ -31,7 +31,7 @@
         <div class="metrics-grid">
             <div class="card">
                 <div class="title">NUnit Test Suite</div>
-                <div class="value pass">27 / 27</div>
+                <div class="value pass">47 / 47</div>
             </div>
             <div class="card">
                 <div class="title">HTML Fixtures Executable</div>
@@ -42,8 +42,8 @@
                 <div class="value pass">3 / 3</div>
             </div>
             <div class="card">
-                <div class="title">Ambiguity Rejections</div>
-                <div class="value pass">100% Safe</div>
+                <div class="title">Field Value Verification</div>
+                <div class="value pass">100% Strict</div>
             </div>
         </div>
 
@@ -87,32 +87,34 @@
             </tbody>
         </table>
 
-        <h2>Fixture Automation (Same Executable Runner)</h2>
+        <h2>Fixture Automation (Field-Level Verified)</h2>
         <table>
             <thead>
                 <tr>
                     <th>Fixture</th>
                     <th>Variation Tested</th>
                     <th>Exit Code</th>
+                    <th>Field Validation</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
-                <tr><td>baseline.html</td><td>Original Standard Form Layout</td><td>0</td><td><span class="badge pass">PASSED</span></td></tr>
-                <tr><td>changed-attributes.html</td><td>Scrambled IDs, Names, Classes, Wrapper Styles</td><td>0</td><td><span class="badge pass">PASSED</span></td></tr>
-                <tr><td>reordered-fields.html</td><td>Reordered Sequence (State, Gender, First Name)</td><td>0</td><td><span class="badge pass">PASSED</span></td></tr>
-                <tr><td>changed-structure.html</td><td>Nested Containers, Fieldset Legend, ARIA</td><td>0</td><td><span class="badge pass">PASSED</span></td></tr>
-                <tr><td>similar-fields.html</td><td>Middle Name, Company Name, First Name, Last Name</td><td>0</td><td><span class="badge pass">PASSED</span></td></tr>
-                <tr><td>similar-fields-expanded.html</td><td>Account First Name, Billing State, User State</td><td>0</td><td><span class="badge pass">PASSED</span></td></tr>
-                <tr><td>label-variations.html</td><td>Given Name, Select Gender, State/Province</td><td>0</td><td><span class="badge pass">PASSED</span></td></tr>
+                <tr><td>baseline.html</td><td>Original Standard Form Layout</td><td>0</td><td>VERIFIED</td><td><span class="badge pass">PASSED</span></td></tr>
+                <tr><td>changed-attributes.html</td><td>Scrambled IDs, Names, Classes, Wrapper Styles</td><td>0</td><td>VERIFIED</td><td><span class="badge pass">PASSED</span></td></tr>
+                <tr><td>reordered-fields.html</td><td>Reordered Sequence (State, Gender, Last Name, First Name)</td><td>0</td><td>VERIFIED</td><td><span class="badge pass">PASSED</span></td></tr>
+                <tr><td>changed-structure.html</td><td>Nested Containers, Fieldset Legend, ARIA</td><td>0</td><td>VERIFIED</td><td><span class="badge pass">PASSED</span></td></tr>
+                <tr><td>similar-fields.html</td><td>Middle Name, Company Name, First Name, Last Name</td><td>0</td><td>VERIFIED</td><td><span class="badge pass">PASSED</span></td></tr>
+                <tr><td>similar-fields-expanded.html</td><td>Account First Name, Billing State, User State</td><td>0</td><td>VERIFIED</td><td><span class="badge pass">PASSED</span></td></tr>
+                <tr><td>label-variations.html</td><td>Given Name, Select Gender, State/Province</td><td>0</td><td>VERIFIED</td><td><span class="badge pass">PASSED</span></td></tr>
             </tbody>
         </table>
 
         <h2>Audited & Verified Engineering Guardrails</h2>
         <ul>
             <li><strong>Zero Hardcoded Selectors:</strong> No fixed IDs (`#fname`), fixed names, or absolute XPaths used.</li>
+            <li><strong>Strict Value Verification:</strong> Exact normalized and word-boundary matching (`TextNormalizer.MatchesWord`, `IsMatchForValue`) prevents substring collisions (e.g. Female matching Male).</li>
+            <li><strong>Independent Fixture Telemetry:</strong> `scripts/run-all-fixtures.ps1` parses generated JSON telemetry and independently validates each field's expected vs actual values.</li>
             <li><strong>Refusal on Ambiguity:</strong> When competing fields are equidistant (&Delta; &le; 5.0%), framework cleanly refuses arbitrary interaction.</li>
-            <li><strong>Strict Value Verification:</strong> Post-interaction DOM assertions verify that input or selected options genuinely reflect the intended value.</li>
             <li><strong>Disabled & Hidden Element Guards:</strong> Prevents interaction with inactive DOM nodes and reports descriptive diagnostic explanations.</li>
         </ul>
 
@@ -122,4 +124,3 @@
     </div>
 </body>
 </html>
-

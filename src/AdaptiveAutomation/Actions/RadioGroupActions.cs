@@ -29,11 +29,10 @@ public class RadioGroupActions
         IWebElement? matchingRadio = null;
         string selectedOptionLabel = string.Empty;
 
-        // 1. Try dictionary lookup
+        // 1. Pass 1: Exact match on option text or value
         foreach (var (optText, radio) in candidate.OptionElementMap)
         {
-            if (TextNormalizer.ExactMatch(optText, targetOption) ||
-                TextNormalizer.ContainsNormalized(optText, targetOption))
+            if (TextNormalizer.ExactMatch(optText, targetOption))
             {
                 matchingRadio = radio;
                 selectedOptionLabel = optText;
@@ -41,13 +40,40 @@ public class RadioGroupActions
             }
         }
 
-        // 2. Fallback to iterating elements and checking value or adjacent label
         if (matchingRadio == null)
         {
             foreach (var radio in candidate.GroupElements)
             {
                 string val = radio.GetAttribute("value") ?? string.Empty;
                 if (TextNormalizer.ExactMatch(val, targetOption))
+                {
+                    matchingRadio = radio;
+                    selectedOptionLabel = val;
+                    break;
+                }
+            }
+        }
+
+        // 2. Pass 2: Whole word boundary match (only if exact match not found; prevents "Female" matching "Male")
+        if (matchingRadio == null)
+        {
+            foreach (var (optText, radio) in candidate.OptionElementMap)
+            {
+                if (TextNormalizer.MatchesWord(optText, targetOption))
+                {
+                    matchingRadio = radio;
+                    selectedOptionLabel = optText;
+                    break;
+                }
+            }
+        }
+
+        if (matchingRadio == null)
+        {
+            foreach (var radio in candidate.GroupElements)
+            {
+                string val = radio.GetAttribute("value") ?? string.Empty;
+                if (TextNormalizer.MatchesWord(val, targetOption))
                 {
                     matchingRadio = radio;
                     selectedOptionLabel = val;

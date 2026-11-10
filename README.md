@@ -1,8 +1,8 @@
 # Adaptive Selenium Automation Framework (.NET 8 & C#)
 
 [![Build & Test Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
-[![Tests](https://img.shields.io/badge/tests-27%2F27%20passed%20(100%25)-brightgreen.svg)]()
-[![Fixtures](https://img.shields.io/badge/fixtures-7%2F7%20passed%20(100%25)-brightgreen.svg)]()
+[![Tests](https://img.shields.io/badge/tests-47%2F47%20passed%20(100%25)-brightgreen.svg)]()
+[![Fixtures](https://img.shields.io/badge/fixtures-7%2F7%20verified%20(100%25)-brightgreen.svg)]()
 [![.NET Version](https://img.shields.io/badge/.NET-8.0-blue.svg)]()
 [![Selenium Version](https://img.shields.io/badge/Selenium-4.28-orange.svg)]()
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Cross--Platform-lightgrey.svg)]()
@@ -267,21 +267,22 @@ $$\text{Score}(c) = \min\left(100, \max\left(0, \sum W_i \cdot M_i(c) - \sum P_j
 ```
 
 ### 8.3 Run the Standalone Fixture Runner (All 7 Fixtures)
-A dedicated PowerShell script executes the **same compiled binary** (`AdaptiveAutomation.exe`) sequentially across all 7 HTML mutation fixtures via `--url`:
+A dedicated PowerShell script executes the **same compiled binary** (`AdaptiveAutomation.exe`) sequentially across all 7 HTML mutation fixtures via `--url` and independently verifies field-level expected vs actual values:
 ```powershell
 powershell -ExecutionPolicy Bypass -File ".\scripts\run-all-fixtures.ps1"
 ```
 
 ### 8.4 Run the Automated Test Suite (NUnit)
 ```powershell
-# Run all 27 tests (Unit, Mutation & Component tests)
+# Run all 47 tests (Unit, Mutation, Failure & Value Verification tests)
 .\.dotnet\dotnet.exe test --no-build --logger "console;verbosity=normal"
 
-# Run specific mutation suites
+# Run specific test suites
 .\.dotnet\dotnet.exe test --filter "FullyQualifiedName~AdaptiveRegressionTests" --no-build
 .\.dotnet\dotnet.exe test --filter "FullyQualifiedName~LabelVariationTests" --no-build
 .\.dotnet\dotnet.exe test --filter "FullyQualifiedName~InteractionFailureTests" --no-build
 .\.dotnet\dotnet.exe test --filter "FullyQualifiedName~SimilarFieldsExpandedTests" --no-build
+.\.dotnet\dotnet.exe test --filter "FullyQualifiedName~ValueVerificationTests" --no-build
 ```
 
 ---

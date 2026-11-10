@@ -53,13 +53,13 @@ public class DropdownActions
             }
         }
 
-        // 2. Search for substring match
+        // 2. Search for whole-word boundary match (only if exact match not found; prevents "Indiana" matching "India")
         if (matchingOption == null)
         {
             foreach (var opt in options)
             {
-                if (TextNormalizer.ContainsNormalized(opt.Text, targetOption) ||
-                    TextNormalizer.ContainsNormalized(opt.GetAttribute("value"), targetOption))
+                if (TextNormalizer.MatchesWord(opt.Text, targetOption) ||
+                    TextNormalizer.MatchesWord(opt.GetAttribute("value"), targetOption))
                 {
                     matchingOption = opt;
                     break;
